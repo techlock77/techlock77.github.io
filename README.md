@@ -1,50 +1,25 @@
-# Nitesh's Data Mastery
+# Nitesh C Career Portfolio
 
-Welcome to my personal data engineering portfolio website repository. This site showcases my skills, projects, and expertise in building robust data pipelines, architecting data solutions, and enabling efficient data processing systems.
+This repository contains a static GitHub Pages career site for Nitesh C, focused on enterprise data engineering architecture, cloud data platforms, modernization, and analytics enablement.
 
-## About This Project
+## Live Site
 
-This website is hosted using GitHub Pages, a free hosting service that allows me to share my data engineering journey with the world. The site includes:
+The site is intended to be hosted at:
 
-- Information about my background and technical skills
-- Showcase of data pipeline projects and infrastructure implementations
-- ETL processes, data warehousing, and data lake solutions I've developed
-- Big data technologies and cloud platforms I work with
-- Contact information for potential collaborators
+https://techlock77.github.io/
 
-## Technologies I Work With
+## Structure
 
-### Website Technologies
-- HTML5
-- CSS3
-- GitHub Pages for hosting
+- `index.html` - main portfolio page
+- `styles/site.css` - responsive layout, theme, and visual styling
+- `scripts/client-tiles.js` - project filtering, client highlights, theme toggle, mobile navigation, and animated metrics
+- `images/` - client logos and supporting assets
+- `your-resume.pdf` - resume linked from the page
 
-### Data Engineering Technologies
-- SQL and NoSQL Databases (PostgreSQL, MongoDB, etc.)
-- ETL/ELT Tools (Apache Airflow, Apache NiFi)
-- Big Data Technologies (Apache Spark, Hadoop)
-- Cloud Platforms (AWS, Azure, or GCP)
-- Data Warehousing Solutions
-- Containerization and Orchestration (Docker, Kubernetes)
-- Programming Languages (Python, Java, Scala)
+## Hosting
 
-## How to Navigate
+This is a plain static site, so GitHub Pages can serve it directly from the `main` branch with no build step.
 
-The main website can be viewed at: https://techlock77.github.io/
+## Local Preview
 
-## Future Updates
-
-I plan to regularly update this portfolio with new projects showcasing:
-- Advanced data pipeline architectures
-- Real-time data processing systems
-- Data governance and quality frameworks
-- Cloud-native data solutions
-- Performance optimization techniques for data workflows
-
-## Contact
-
-Feel free to reach out to me for collaborations or questions about my data engineering work.
-
----
-
-© 2025 Nitesh's Data Mastery
+Open `index.html` in a browser, or use any small static file server from the repository root.

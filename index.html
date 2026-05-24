@@ -3,137 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nitesh's Data Engineering Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <meta name="description" content="Career portfolio for Nitesh C, an enterprise data engineering architect specializing in cloud data platforms, analytics modernization, and scalable data products.">
+  <title>Nitesh C | Data Engineering Architect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
-  <header>
-    <h1>Nitesh C</h1>
-    <p>Enterprise Data Engineering Architect</p>
-    <nav>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Nitesh C home">
+        <span class="brand-mark">NC</span>
+        <span>Nitesh C</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark</button>
     </nav>
   </header>
 
-  <main class="container">
-    <section id="about">
-      <h2>About Me</h2>
-      <p>I design scalable data platforms that transform raw information into actionable insights. My experience spans cloud data warehousing, streaming pipelines and analytics solutions.</p>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Enterprise Data Engineering Architect</p>
+        <h1>Building data platforms that turn messy systems into trusted decisions.</h1>
+        <p class="hero-text">I design and modernize cloud data ecosystems, from batch and streaming pipelines to analytics-ready marts, governance patterns, and business-facing data products.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="your-resume.pdf">View resume</a>
+          <a class="button secondary" href="https://github.com/techlock77">GitHub profile</a>
+        </div>
+      </div>
+      <aside class="career-card" aria-label="Career highlights">
+        <div>
+          <p class="eyebrow">Career Snapshot</p>
+          <h2>Modern data delivery for enterprise teams.</h2>
+        </div>
+        <div class="metric-grid">
+          <div class="metric">
+            <strong data-count="6">0</strong>
+            <span>featured clients</span>
+          </div>
+          <div class="metric">
+            <strong data-count="12">0</strong>
+            <span>core capabilities</span>
+          </div>
+          <div class="metric">
+            <strong data-count="3">0</strong>
+            <span>cloud and data domains</span>
+          </div>
+        </div>
+        <div class="status-list">
+          <span>Cloud architecture</span>
+          <span>ETL and ELT modernization</span>
+          <span>Analytics enablement</span>
+        </div>
+      </aside>
     </section>
 
-    <section id="skills">
-      <h2>Skills</h2>
-      <ul class="skills-list">
+    <section class="section" id="about">
+      <div class="section-heading">
+        <p class="eyebrow">About</p>
+        <h2>Data engineering leadership with hands-on delivery.</h2>
+      </div>
+      <div class="about-grid">
+        <p>I help teams move from fragmented reporting and fragile pipelines to reliable, scalable data platforms. My work spans ingestion, modeling, orchestration, migration, optimization, and stakeholder-ready analytics.</p>
+        <p>I am strongest where architecture and delivery meet: shaping the target state, translating business needs into data products, and building practical foundations that teams can operate after launch.</p>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="section-heading">
+        <p class="eyebrow">Capabilities</p>
+        <h2>What I bring to data teams.</h2>
+      </div>
+      <div class="capability-grid">
+        <article>
+          <h3>Platform Architecture</h3>
+          <p>Cloud data warehouse, lakehouse, ingestion, orchestration, and consumption patterns designed for scale and maintainability.</p>
+        </article>
+        <article>
+          <h3>Pipeline Modernization</h3>
+          <p>Legacy ETL analysis, redesign, automation, data quality controls, and performance tuning for operational confidence.</p>
+        </article>
+        <article>
+          <h3>Analytics Products</h3>
+          <p>Curated marts, semantic layers, dashboards, and decision-support workflows that make data easier to trust and use.</p>
+        </article>
+      </div>
+      <ul class="skills-list" aria-label="Technical skills">
         <li>Python</li>
         <li>SQL</li>
         <li>Databricks</li>
         <li>Snowflake</li>
         <li>AWS</li>
+        <li>Azure</li>
         <li>Airflow</li>
+        <li>Spark</li>
+        <li>Data Warehousing</li>
+        <li>ETL/ELT</li>
+        <li>Data Modeling</li>
+        <li>Governance</li>
       </ul>
     </section>
 
-    <section id="projects">
-      <h2>Projects</h2>
-      <p>Visit my <a href="https://github.com/techlock77">GitHub profile</a> for examples of data engineering projects and infrastructure code.</p>
-      <div class="project-grid">
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">Smart Room Allocation Optimization</div>
-            <div class="tile-back">Smart Room Allocation Optimization</div>
-          </div>
+    <section class="section" id="projects">
+      <div class="section-heading split">
+        <div>
+          <p class="eyebrow">Selected Work</p>
+          <h2>Project stories with measurable architecture value.</h2>
         </div>
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">Audience Sentiment Enrichment</div>
-            <div class="tile-back">Audience Sentiment Enrichment</div>
-          </div>
+        <div class="project-controls" aria-label="Project filters">
+          <button class="filter-button active" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="architecture">Architecture</button>
+          <button class="filter-button" type="button" data-filter="analytics">Analytics</button>
+          <button class="filter-button" type="button" data-filter="modernization">Modernization</button>
         </div>
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">Data Architecture &amp; Modernization</div>
-            <div class="tile-back">Data Architecture &amp; Modernization</div>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">ETL process Modernization</div>
-            <div class="tile-back">ETL process Modernization</div>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">Data Modernization + Ring Central Implementation</div>
-            <div class="tile-back">Data Modernization + Ring Central Implementation</div>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-inner">
-            <div class="tile-front">Transactional Process Data Mart</div>
-            <div class="tile-back">Transactional Process Data Mart</div>
-          </div>
+      </div>
+      <div class="project-grid" id="projectGrid"></div>
+      <div class="detail-panel" id="projectDetail" aria-live="polite">
+        <div>
+          <h3>Select a project</h3>
+          <p>Choose a project card to see the focus area and delivery outcome.</p>
         </div>
       </div>
     </section>
 
-    <section id="clients">
-      <h2>Clients</h2>
-      <div class="client-grid">
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/Amazon.png" alt="Amazon logo"></div>
-            <div class="tile-back">Amazon</div>
-          </div>
-        </div>
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/hyatt.svg" alt="Hyatt logo"></div>
-            <div class="tile-back">Hyatt</div>
-          </div>
-        </div>
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/ryder.png" alt="Ryder logo"></div>
-            <div class="tile-back">Ryder</div>
-          </div>
-        </div>
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/3m.png" alt="3M logo"></div>
-            <div class="tile-back">3M</div>
-          </div>
-        </div>
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/fl_dfs.png" alt="FL-DFS logo"></div>
-            <div class="tile-back">FL-DFS</div>
-          </div>
-        </div>
-        <div class="client-tile">
-          <div class="tile-inner">
-            <div class="tile-front"><img src="images/windhaven.png" alt="Windhaven Insurance Company logo"></div>
-            <div class="tile-back">Windhaven Insurance Company</div>
-          </div>
-        </div>
+    <section class="section" id="clients">
+      <div class="section-heading">
+        <p class="eyebrow">Client Matrix</p>
+        <h2>Enterprise environments I have supported.</h2>
       </div>
+      <div class="client-grid" aria-label="Client logos arranged in a 3 by 2 matrix">
+        <button class="client-tile" type="button" data-client="Amazon">
+          <img src="images/Amazon.png" alt="Amazon logo">
+          <span>Amazon</span>
+        </button>
+        <button class="client-tile" type="button" data-client="Hyatt">
+          <img src="images/hyatt.svg" alt="Hyatt logo">
+          <span>Hyatt</span>
+        </button>
+        <button class="client-tile" type="button" data-client="Ryder">
+          <img src="images/ryder.png" alt="Ryder logo">
+          <span>Ryder</span>
+        </button>
+        <button class="client-tile" type="button" data-client="3M">
+          <img src="images/3m.png" alt="3M logo">
+          <span>3M</span>
+        </button>
+        <button class="client-tile" type="button" data-client="FL-DFS">
+          <img src="images/fl_dfs.png" alt="FL-DFS logo">
+          <span>FL-DFS</span>
+        </button>
+        <button class="client-tile" type="button" data-client="Windhaven Insurance Company">
+          <img src="images/windhaven.png" alt="Windhaven Insurance Company logo">
+          <span>Windhaven Insurance Company</span>
+        </button>
+      </div>
+      <p class="client-note" id="clientNote">Select a client tile to highlight it.</p>
     </section>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:nitesh@example.com">nitesh@example.com</a></p>
-      <p><a href="your-resume.pdf">View My Resume</a></p>
+    <section class="section contact-section" id="contact">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Let’s talk about data platforms, modernization, or architecture roles.</h2>
+        <p>My resume is included in this site, and my GitHub profile is linked below for code and project context.</p>
+      </div>
+      <div class="contact-actions">
+        <a class="button primary" href="your-resume.pdf">Download resume</a>
+        <a class="button secondary" href="https://github.com/techlock77">Open GitHub</a>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Nitesh C</p>
+  <footer class="footer">
+    <p>&copy; 2026 Nitesh C. Built for GitHub Pages.</p>
   </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="scripts/client-tiles.js"></script>
 </body>
 </html>
