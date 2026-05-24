@@ -183,10 +183,10 @@ a {
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-  min-height: calc(100vh - 69px);
+  min-height: clamp(560px, 78vh, 760px);
   align-items: center;
   gap: 46px;
-  padding: 64px 0;
+  padding: 44px 0 34px;
 }
 
 .eyebrow {
@@ -583,6 +583,9 @@ h3 {
 
   .hero {
     min-height: auto;
+    align-items: start;
+    gap: 24px;
+    padding: 34px 0 18px;
   }
 
   .section-heading.split,
@@ -607,6 +610,19 @@ h3 {
   .contact-section,
   .career-card {
     padding: 22px;
+  }
+
+  .hero {
+    gap: 18px;
+    padding: 24px 0 14px;
+  }
+
+  .hero-actions {
+    margin-top: 20px;
+  }
+
+  .career-card {
+    gap: 16px;
   }
 
   h1 {
