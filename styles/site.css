@@ -181,12 +181,13 @@ a {
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-  min-height: clamp(560px, 78vh, 760px);
-  align-items: center;
-  gap: 46px;
-  padding: 44px 0 34px;
+  display: block;
+  min-height: auto;
+  padding: 44px 0 26px;
+}
+
+.hero-copy {
+  max-width: 920px;
 }
 
 .eyebrow {
@@ -274,6 +275,8 @@ h3 {
 .career-card {
   display: grid;
   gap: 24px;
+  max-width: 860px;
+  margin-top: 28px;
   padding: 24px;
 }
 
@@ -487,7 +490,7 @@ h3 {
   min-height: 150px;
   place-items: center;
   gap: 12px;
-  padding: 20px;
+  padding: 24px;
   border-color: var(--line);
   background: var(--surface);
   color: var(--text);
@@ -495,10 +498,10 @@ h3 {
 }
 
 .client-tile img {
-  max-width: min(150px, 82%);
-  max-height: 62px;
+  max-width: min(155px, 84%);
+  max-height: 58px;
   object-fit: contain;
-  filter: saturate(0.95);
+  filter: saturate(0.9) contrast(1.02);
 }
 
 .client-tile span {
