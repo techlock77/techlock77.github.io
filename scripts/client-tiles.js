@@ -1,45 +1,45 @@
 const projects = [
   {
-    title: "Smart Room Allocation Optimization",
+    title: "Hyatt: Real-Time Compliance and Guest Data Lineage",
     category: "analytics",
-    summary: "Optimization model for aligning room demand, availability, and operational constraints.",
-    outcome: "Improved allocation planning by turning manual scheduling decisions into a repeatable analytics workflow.",
-    tags: ["Optimization", "Analytics", "Planning"]
+    summary: "Built near real-time lineage and compliance pipelines across Kafka, S3, Snowflake, Tableau, and Kubernetes.",
+    outcome: "Reduced SLA breaches by 45%, cut ETL latency by 80%, enabled suspicious transaction tracing across 7 global regions, and maintained 99.99% uptime.",
+    tags: ["Snowflake", "Kafka", "Tableau", "Kubernetes"]
   },
   {
-    title: "Audience Sentiment Enrichment",
+    title: "TD Bank: AML Risk Monitoring and MLOps",
     category: "analytics",
-    summary: "Pipeline for enriching audience feedback with sentiment and downstream reporting signals.",
-    outcome: "Created a cleaner path from raw feedback to insight-ready features for engagement analysis.",
-    tags: ["NLP", "Enrichment", "Reporting"]
+    summary: "Architected AML data pipelines and feature engineering workflows for 15M+ daily banking transactions.",
+    outcome: "Reduced suspicious activity detection latency by 78%, improved model accuracy by 32%, lowered manual review cycles by 45%, and saved $150K annually through Redshift migration.",
+    tags: ["Snowflake", "Kafka", "Airflow", "XGBoost"]
   },
   {
-    title: "Data Architecture & Modernization",
+    title: "Accenture / Bridgestone: AWS Lakehouse Modernization",
     category: "architecture",
-    summary: "Target-state architecture for modern ingestion, transformation, storage, and consumption layers.",
-    outcome: "Defined scalable foundations for trusted analytics and easier platform evolution.",
-    tags: ["Architecture", "Cloud", "Governance"]
+    summary: "Modernized legacy ETL to AWS, Snowflake, Apache Iceberg, Glue, PySpark, SageMaker, MLflow, and Kubernetes.",
+    outcome: "Reduced data processing time by 6 hours, improved query performance by 5x, supported 300+ concurrent workloads, and improved inference response time by 35%.",
+    tags: ["AWS", "Iceberg", "Snowflake", "MLflow"]
   },
   {
-    title: "ETL Process Modernization",
+    title: "FL-DFS: Insurance Risk Warehouse Modernization",
     category: "modernization",
-    summary: "Legacy process review and redesign focused on reliability, orchestration, and maintainability.",
-    outcome: "Reduced fragile handoffs and improved pipeline visibility with clearer operational controls.",
-    tags: ["ETL", "Automation", "Quality"]
+    summary: "Led Snowflake migration for a 100TB risk management warehouse with encryption, lineage, and audit documentation.",
+    outcome: "Reduced audit exceptions by 45% while supporting bankruptcy takeover data from insurance companies across multiple states.",
+    tags: ["Snowflake", "Collibra", "Encryption", "Governance"]
   },
   {
-    title: "Data Modernization + RingCentral Implementation",
+    title: "Ryder: Governance Automation and Self-Service Analytics",
     category: "modernization",
-    summary: "Integration and data modernization work supporting communications and operational reporting.",
-    outcome: "Connected source-system activity to cleaner reporting flows and stakeholder-facing metrics.",
-    tags: ["Integration", "Modernization", "Operations"]
+    summary: "Consolidated 30 systems into Snowflake and built real-time ingestion using Kafka Connect, Iceberg, S3, and Airflow.",
+    outcome: "Reduced report generation time by 50%, processed 5TB daily, reduced manual refresh work by 90%, and cut audit findings by 90%.",
+    tags: ["Snowflake", "AWS Glue", "Kafka", "Airflow"]
   },
   {
-    title: "Transactional Process Data Mart",
+    title: "Windhaven and 3M: Migration, Quality, and ETL Optimization",
     category: "architecture",
-    summary: "Curated mart design for transactional process analytics and decision support.",
-    outcome: "Created a more usable analytics layer from operational data with clearer business definitions.",
-    tags: ["Data Mart", "Modeling", "SQL"]
+    summary: "Delivered insurance data migration, regulatory reporting, Snowflake adoption, PL/SQL testing, and Informatica tuning.",
+    outcome: "Reduced claim processing from 14 hours to 3 hours, delivered 115% first-year ROI, cut query execution by 40%, reduced problem tickets by 35%, and improved ETL ingestion by 60%.",
+    tags: ["ADF", "Snowflake", "SSIS", "Informatica"]
   }
 ];
 
@@ -52,10 +52,18 @@ const navLinks = document.querySelector("#navLinks");
 const clientNote = document.querySelector("#clientNote");
 const toast = document.querySelector("#toast");
 const scrollProgress = document.querySelector("#scrollProgress");
+const resumeModal = document.querySelector("#resumeModal");
+const resumeEmail = document.querySelector("#resumeEmail");
+const resumeCode = document.querySelector("#resumeCode");
+const requestCodeButton = document.querySelector("#requestCode");
+const verifyCodeButton = document.querySelector("#verifyCode");
+const codePanel = document.querySelector("#codePanel");
+const demoCode = document.querySelector("#demoCode");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
 let revealObserver;
+let activeResumeCode = "";
 
 const categoryIcons = {
   analytics: "AN",
@@ -68,6 +76,17 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("visible");
   toastTimer = setTimeout(() => toast.classList.remove("visible"), 2200);
+}
+
+function saveResumeAccessAttempt(email, status) {
+  const attempts = JSON.parse(localStorage.getItem("resume-access-attempts") || "[]");
+  attempts.push({
+    email,
+    status,
+    timestamp: new Date().toISOString(),
+    page: window.location.href
+  });
+  localStorage.setItem("resume-access-attempts", JSON.stringify(attempts.slice(-50)));
 }
 
 function renderProjects() {
@@ -133,6 +152,44 @@ document.querySelectorAll(".client-tile").forEach((tile) => {
     clientNote.textContent = `${tile.dataset.client} highlighted in the client matrix.`;
     showToast(`${tile.dataset.client} highlighted`);
   });
+});
+
+document.querySelectorAll("[data-resume-trigger]").forEach((button) => {
+  button.addEventListener("click", () => {
+    resumeModal.showModal();
+    resumeEmail.focus();
+  });
+});
+
+requestCodeButton.addEventListener("click", () => {
+  const email = resumeEmail.value.trim();
+  if (!email || !resumeEmail.checkValidity()) {
+    showToast("Enter a valid email to request resume access.");
+    resumeEmail.focus();
+    return;
+  }
+
+  activeResumeCode = String(Math.floor(100000 + Math.random() * 900000));
+  demoCode.textContent = activeResumeCode;
+  codePanel.hidden = false;
+  saveResumeAccessAttempt(email, "code_requested_static_preview");
+  showToast("Verification code generated for this static preview.");
+});
+
+verifyCodeButton.addEventListener("click", () => {
+  const email = resumeEmail.value.trim();
+  const code = resumeCode.value.trim();
+
+  if (!activeResumeCode || code !== activeResumeCode) {
+    saveResumeAccessAttempt(email || "unknown", "failed_code");
+    showToast("That code does not match.");
+    return;
+  }
+
+  saveResumeAccessAttempt(email, "resume_opened_static_preview");
+  showToast("Resume access verified.");
+  window.open("your-resume.pdf", "_blank", "noopener");
+  resumeModal.close();
 });
 
 themeToggle.addEventListener("click", () => {

@@ -766,10 +766,26 @@ h3 {
   filter: saturate(0.9) contrast(1.02);
 }
 
+.client-mark {
+  display: grid;
+  width: 74px;
+  height: 58px;
+  place-items: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--signal));
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 850;
+}
+
 .client-tile span {
   color: var(--muted);
   font-size: 0.9rem;
   font-weight: 800;
+}
+
+.client-tile .client-mark {
+  color: #ffffff;
 }
 
 .client-tile:hover::before,
@@ -823,6 +839,104 @@ h3 {
 .toast.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.resume-modal {
+  width: min(520px, calc(100% - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+}
+
+.resume-modal::backdrop {
+  background: rgba(7, 21, 29, 0.58);
+  backdrop-filter: blur(8px);
+}
+
+.resume-modal-card {
+  display: grid;
+  gap: 12px;
+  position: relative;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.resume-modal-card h2 {
+  margin-bottom: 4px;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+
+.modal-copy,
+.modal-note,
+.code-panel p {
+  color: var(--muted);
+}
+
+.modal-note,
+.code-panel p {
+  margin-bottom: 0;
+  font-size: 0.88rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--text);
+  font-size: 1.25rem;
+}
+
+.resume-modal-card label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.resume-modal-card input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+
+.resume-modal-card input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.code-panel {
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+  border-radius: 8px;
+  background: var(--accent-soft);
+}
+
+.code-panel span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.code-panel strong {
+  display: block;
+  color: var(--accent-strong);
+  font-size: 2rem;
+  letter-spacing: 0.12em;
 }
 
 .reveal {
