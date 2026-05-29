@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <header class="site-header">
     <nav class="nav" aria-label="Main navigation">
       <a class="brand" href="#top" aria-label="Nitesh C home">
@@ -70,6 +71,28 @@
             <span>Analytics enablement</span>
           </div>
         </aside>
+        <div class="hero-visual" aria-label="Data platform visual">
+          <div class="flow-graphic" aria-hidden="true">
+            <span class="flow-node node-source">Sources</span>
+            <span class="flow-line line-one"></span>
+            <span class="flow-node node-pipeline">Pipelines</span>
+            <span class="flow-line line-two"></span>
+            <span class="flow-node node-platform">Platform</span>
+            <span class="flow-line line-three"></span>
+            <span class="flow-node node-insight">Insights</span>
+          </div>
+          <div class="signal-card">
+            <span>Data quality</span>
+            <strong>99.8%</strong>
+            <div class="signal-bars">
+              <i style="--height: 44%"></i>
+              <i style="--height: 68%"></i>
+              <i style="--height: 52%"></i>
+              <i style="--height: 86%"></i>
+              <i style="--height: 74%"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -81,6 +104,24 @@
       <div class="about-grid">
         <p>I help teams move from fragmented reporting and fragile pipelines to reliable, scalable data platforms. My work spans ingestion, modeling, orchestration, migration, optimization, and stakeholder-ready analytics.</p>
         <p>I am strongest where architecture and delivery meet: shaping the target state, translating business needs into data products, and building practical foundations that teams can operate after launch.</p>
+      </div>
+    </section>
+
+    <section class="visual-strip" aria-label="Data delivery process">
+      <div class="visual-step">
+        <span class="step-icon">01</span>
+        <h3>Discover</h3>
+        <p>Map systems, users, data contracts, and the highest-value decision paths.</p>
+      </div>
+      <div class="visual-step">
+        <span class="step-icon">02</span>
+        <h3>Engineer</h3>
+        <p>Design reliable ingestion, transformation, modeling, and orchestration layers.</p>
+      </div>
+      <div class="visual-step">
+        <span class="step-icon">03</span>
+        <h3>Activate</h3>
+        <p>Ship dashboards, marts, and operational data products people can actually use.</p>
       </div>
     </section>
 
@@ -178,7 +219,7 @@
     <section class="section contact-section" id="contact">
       <div>
         <p class="eyebrow">Contact</p>
-        <h2>Let’s talk about data platforms, modernization, or architecture roles.</h2>
+        <h2>Let's talk about data platforms, modernization, or architecture roles.</h2>
         <p>My resume is included in this site, and my GitHub profile is linked below for code and project context.</p>
       </div>
       <div class="contact-actions">

@@ -51,9 +51,17 @@ const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector("#navLinks");
 const clientNote = document.querySelector("#clientNote");
 const toast = document.querySelector("#toast");
+const scrollProgress = document.querySelector("#scrollProgress");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
+let revealObserver;
+
+const categoryIcons = {
+  analytics: "AN",
+  architecture: "AR",
+  modernization: "MZ"
+};
 
 function showToast(message) {
   clearTimeout(toastTimer);
@@ -79,6 +87,7 @@ function renderProjects() {
     }
 
     card.innerHTML = `
+      <span class="project-icon">${categoryIcons[project.category] || "DE"}</span>
       <h3>${project.title}</h3>
       <p>${project.summary}</p>
       <span class="tag-row">
@@ -89,6 +98,8 @@ function renderProjects() {
     card.addEventListener("click", () => selectProject(project));
     projectGrid.appendChild(card);
   });
+
+  setupReveal();
 }
 
 function selectProject(project) {
@@ -107,7 +118,10 @@ function selectProject(project) {
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     activeFilter = button.dataset.filter;
-    filterButtons.forEach((item) => item.classList.toggle("active", item === button));
+    filterButtons.forEach((item) => {
+      item.classList.toggle("active", item === button);
+      item.setAttribute("aria-pressed", String(item === button));
+    });
     renderProjects();
   });
 });
@@ -157,10 +171,51 @@ document.querySelectorAll("[data-count]").forEach((counter) => {
   requestAnimationFrame(tick);
 });
 
+function updateScrollProgress() {
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const percent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+  scrollProgress.style.width = `${Math.min(percent, 100)}%`;
+}
+
+function setupReveal() {
+  const revealItems = document.querySelectorAll(".section, .career-card, .hero-visual, .visual-step, .project-card, .client-tile");
+
+  if (!("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+  }
+
+  revealItems.forEach((item) => {
+    if (!item.classList.contains("is-visible")) {
+      item.classList.add("reveal");
+      revealObserver.observe(item);
+    }
+  });
+}
+
 const savedTheme = localStorage.getItem("portfolio-theme");
 if (savedTheme) {
   document.documentElement.dataset.theme = savedTheme;
   themeToggle.textContent = savedTheme === "dark" ? "Light" : "Dark";
 }
 
+filterButtons.forEach((button) => {
+  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+});
+
+window.addEventListener("scroll", updateScrollProgress, { passive: true });
+window.addEventListener("resize", updateScrollProgress);
+updateScrollProgress();
 renderProjects();
+setupReveal();
