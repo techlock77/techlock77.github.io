@@ -241,22 +241,22 @@
 
   <dialog class="resume-modal" id="resumeModal" aria-labelledby="resumeModalTitle">
     <form class="resume-modal-card" method="dialog">
-      <button class="modal-close" value="cancel" aria-label="Close resume access dialog">×</button>
+      <button class="modal-close" value="cancel" aria-label="Close resume access dialog">x</button>
       <p class="eyebrow">Resume Access</p>
       <h2 id="resumeModalTitle">Get a secure code to view the resume.</h2>
-      <p class="modal-copy">Enter your work email. This static GitHub Pages version records the request in this browser and prepares the experience for a backend email-code service.</p>
+      <p class="modal-copy">Enter your work email. A verification code will be sent to that inbox, and the request will be logged for follow-up.</p>
       <label for="resumeEmail">Work email</label>
       <input id="resumeEmail" type="email" autocomplete="email" placeholder="recruiter@company.com">
       <button class="button primary" id="requestCode" type="button">Request code</button>
-      <div class="code-panel" id="codePanel" hidden>
-        <span>Verification code</span>
-        <strong id="demoCode"></strong>
-        <p>Use this code to unlock the resume in this static preview.</p>
+      <div class="code-panel" id="codePanel" hidden aria-live="polite">
+        <span>Status</span>
+        <strong id="codeStatus">Code sent</strong>
+        <p id="codeMessage">Check your email for the verification code.</p>
       </div>
       <label for="resumeCode">Enter code</label>
       <input id="resumeCode" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code">
       <button class="button secondary" id="verifyCode" type="button">Verify and open resume</button>
-      <p class="modal-note">For production email delivery and central logging, connect this form to a small backend such as AWS Lambda, Google Apps Script, or a serverless form service.</p>
+      <p class="modal-note">This access flow requires the resume access API endpoint configured in <code>scripts/client-tiles.js</code>.</p>
     </form>
   </dialog>
 

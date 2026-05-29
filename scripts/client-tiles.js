@@ -58,12 +58,16 @@ const resumeCode = document.querySelector("#resumeCode");
 const requestCodeButton = document.querySelector("#requestCode");
 const verifyCodeButton = document.querySelector("#verifyCode");
 const codePanel = document.querySelector("#codePanel");
-const demoCode = document.querySelector("#demoCode");
+const codeStatus = document.querySelector("#codeStatus");
+const codeMessage = document.querySelector("#codeMessage");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
 let revealObserver;
-let activeResumeCode = "";
+
+// Set this after deploying backend/resume-access-lambda.
+// Example: const RESUME_ACCESS_API_URL = "https://abc123.execute-api.us-east-1.amazonaws.com/prod/resume-access";
+const RESUME_ACCESS_API_URL = "";
 
 const categoryIcons = {
   analytics: "AN",
@@ -87,6 +91,30 @@ function saveResumeAccessAttempt(email, status) {
     page: window.location.href
   });
   localStorage.setItem("resume-access-attempts", JSON.stringify(attempts.slice(-50)));
+}
+
+async function callResumeAccessApi(payload) {
+  if (!RESUME_ACCESS_API_URL) {
+    throw new Error("Resume access API is not configured yet.");
+  }
+
+  const response = await fetch(RESUME_ACCESS_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      ...payload,
+      page: window.location.href,
+      userAgent: navigator.userAgent
+    })
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.ok === false) {
+    throw new Error(result.error || "Resume access request failed.");
+  }
+  return result;
 }
 
 function renderProjects() {
@@ -161,7 +189,7 @@ document.querySelectorAll("[data-resume-trigger]").forEach((button) => {
   });
 });
 
-requestCodeButton.addEventListener("click", () => {
+requestCodeButton.addEventListener("click", async () => {
   const email = resumeEmail.value.trim();
   if (!email || !resumeEmail.checkValidity()) {
     showToast("Enter a valid email to request resume access.");
@@ -169,27 +197,56 @@ requestCodeButton.addEventListener("click", () => {
     return;
   }
 
-  activeResumeCode = String(Math.floor(100000 + Math.random() * 900000));
-  demoCode.textContent = activeResumeCode;
+  requestCodeButton.disabled = true;
   codePanel.hidden = false;
-  saveResumeAccessAttempt(email, "code_requested_static_preview");
-  showToast("Verification code generated for this static preview.");
+  codeStatus.textContent = "Sending code";
+  codeMessage.textContent = "One moment while the verification email is prepared.";
+
+  try {
+    await callResumeAccessApi({ action: "requestCode", email });
+    saveResumeAccessAttempt(email, "code_requested");
+    codeStatus.textContent = "Code sent";
+    codeMessage.textContent = "Check your email for the verification code.";
+    showToast("Verification code sent to email.");
+  } catch (error) {
+    saveResumeAccessAttempt(email, "code_request_failed");
+    codeStatus.textContent = "Setup needed";
+    codeMessage.textContent = error.message;
+    showToast(error.message);
+  } finally {
+    requestCodeButton.disabled = false;
+  }
 });
 
-verifyCodeButton.addEventListener("click", () => {
+verifyCodeButton.addEventListener("click", async () => {
   const email = resumeEmail.value.trim();
   const code = resumeCode.value.trim();
 
-  if (!activeResumeCode || code !== activeResumeCode) {
-    saveResumeAccessAttempt(email || "unknown", "failed_code");
-    showToast("That code does not match.");
+  if (!email || !resumeEmail.checkValidity()) {
+    showToast("Enter the email address used to request the code.");
+    resumeEmail.focus();
     return;
   }
 
-  saveResumeAccessAttempt(email, "resume_opened_static_preview");
-  showToast("Resume access verified.");
-  window.open("your-resume.pdf", "_blank", "noopener");
-  resumeModal.close();
+  if (!code) {
+    showToast("Enter the verification code from your email.");
+    resumeCode.focus();
+    return;
+  }
+
+  verifyCodeButton.disabled = true;
+  try {
+    const result = await callResumeAccessApi({ action: "verifyCode", email, code });
+    saveResumeAccessAttempt(email, "resume_opened");
+    showToast("Resume access verified.");
+    window.open(result.resumeUrl, "_blank", "noopener");
+    resumeModal.close();
+  } catch (error) {
+    saveResumeAccessAttempt(email, "failed_code");
+    showToast(error.message);
+  } finally {
+    verifyCodeButton.disabled = false;
+  }
 });
 
 themeToggle.addEventListener("click", () => {
