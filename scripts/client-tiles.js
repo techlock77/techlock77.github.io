@@ -178,7 +178,7 @@ function updateScrollProgress() {
 }
 
 function setupReveal() {
-  const revealItems = document.querySelectorAll(".section, .career-card, .hero-visual, .visual-step, .project-card, .client-tile");
+  const revealItems = document.querySelectorAll(".section, .hero-contact, .career-card, .impact-dashboard, .impact-card, .project-card, .client-tile");
 
   if (!("IntersectionObserver" in window)) {
     revealItems.forEach((item) => item.classList.add("is-visible"));
