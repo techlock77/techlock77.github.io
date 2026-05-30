@@ -403,14 +403,24 @@ h3 {
   place-items: center;
   position: relative;
   z-index: 1;
-  min-height: 52px;
-  padding: 0 12px;
+  min-height: 58px;
+  padding: 8px 12px;
   border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--line));
   border-radius: 8px;
   background: var(--surface);
   color: var(--accent-strong);
   font-size: 0.82rem;
   font-weight: 850;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.flow-node small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 750;
 }
 
 .flow-line {
@@ -464,6 +474,29 @@ h3 {
   color: var(--ink);
   font-size: 2.2rem;
   line-height: 1;
+}
+
+.mlops-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.outcome-list {
+  display: grid;
+  gap: 8px;
+}
+
+.outcome-list i {
+  display: block;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent-soft) 70%, transparent);
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 850;
 }
 
 .signal-bars {
