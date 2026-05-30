@@ -17,7 +17,6 @@
     <nav class="nav" aria-label="Main navigation">
       <a class="brand" href="#top" aria-label="Nitesh C home">
         <span class="brand-mark">NM</span>
-        <span>Nitesh M</span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
         <span></span>
@@ -40,30 +39,27 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Senior Data Engineer | Real-Time Data & MLOps</p>
-        <h1>Building real-time data and ML platforms for regulated enterprise teams.</h1>
-        <p class="hero-text">I architect AWS, Snowflake, Kafka, Databricks, and MLOps solutions that process 10TB+ workloads, millions of daily events, and compliance-critical data with measurable improvements in latency, cost, quality, and uptime.</p>
+        <h1 class="hero-name">Nitesh Chandra Madham</h1>
+        <h2 class="hero-headline">Building real-time data and ML platforms for regulated enterprise teams.</h2>
         <div class="hero-contact" aria-label="Quick contact links">
+          <a class="contact-button" href="https://www.linkedin.com/in/niteshcse77">
+            <span>LinkedIn</span>
+            <strong>Open Profile</strong>
+          </a>
+          <a class="contact-button" href="https://github.com/techlock77">
+            <span>GitHub</span>
+            <strong>View Profile</strong>
+          </a>
+          <a href="mailto:spacedash77@gmail.com">
+            <span>Email</span>
+            <strong>spacedash77@gmail.com</strong>
+          </a>
           <a href="tel:+19373434126">
             <span>Phone</span>
             <strong>937-343-4126</strong>
           </a>
-          <a href="mailto:NITESHCSE77@GMAIL.COM">
-            <span>Email</span>
-            <strong>NITESHCSE77@GMAIL.COM</strong>
-          </a>
-          <a href="https://www.linkedin.com/in/niteshcse77">
-            <span>LinkedIn</span>
-            <strong>linkedin.com/in/niteshcse77</strong>
-          </a>
-          <a href="https://github.com/techlock77">
-            <span>GitHub</span>
-            <strong>github.com/techlock77</strong>
-          </a>
         </div>
-        <div class="hero-actions">
-          <a class="button primary" href="https://github.com/techlock77">View GitHub profile</a>
-          <a class="button secondary" href="https://www.linkedin.com/in/niteshcse77">Connect on LinkedIn</a>
-        </div>
+        <p class="hero-text">I architect AWS, Snowflake, Kafka, Databricks, and MLOps solutions that process 10TB+ workloads, millions of daily events, and compliance-critical data with measurable improvements in latency, cost, quality, and uptime.</p>
         <div class="snapshot-grid">
           <aside class="career-card" aria-label="Career highlights">
             <div>
@@ -112,8 +108,9 @@
             <div class="impact-row">
               <div class="impact-card">
                 <span class="impact-label">Deployment speed</span>
-                <div class="deployment-gauge" aria-hidden="true">
-                  <span>80%</span>
+                <div class="deployment-gauge" data-speed-gauge data-speed-target="80" aria-hidden="true">
+                  <span><b data-speed-count>0</b>%</span>
+                  <i class="gauge-needle"></i>
                 </div>
                 <p>Faster GitLab, IaC, Lambda, Snowpark, Docker, Kubernetes, and EKS delivery cycles.</p>
               </div>
@@ -156,14 +153,29 @@
       </div>
       <div class="capability-grid">
         <article>
+          <span class="capability-icon cloud-icon" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
           <h3>Cloud Data Platforms</h3>
           <p>Snowflake, Databricks, Redshift, AWS EMR, S3, Glue, Lambda, DMS, Azure Data Factory, and Apache Iceberg/Delta table formats.</p>
         </article>
         <article>
+          <span class="capability-icon stream-icon" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
           <h3>Streaming & Orchestration</h3>
           <p>Kafka, Kinesis, Airflow, Astronomer, Snowflake Tasks, Dynamic Tables, Snowpipe, PySpark, Snowpark, and advanced SQL.</p>
         </article>
         <article>
+          <span class="capability-icon mlops-icon" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
           <h3>MLOps & Governance</h3>
           <p>MLflow, SageMaker, Docker, Kubernetes, EKS, feature engineering, observability, Tableau row-level security, Collibra, and data quality frameworks.</p>
         </article>
