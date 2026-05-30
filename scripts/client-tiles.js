@@ -4,6 +4,11 @@ const projects = [
     category: "analytics",
     summary: "Built near real-time lineage and compliance pipelines across Kafka, S3, Snowflake, Tableau, and Kubernetes.",
     outcome: "Reduced SLA breaches by 45%, cut ETL latency by 80%, enabled suspicious transaction tracing across 7 global regions, and maintained 99.99% uptime.",
+    impacts: [
+      "Cut ETL latency by 80%, helping compliance teams move from delayed checks to near real-time operational visibility.",
+      "Reduced SLA breaches by 45% across compliance workflows, turning a fragile reporting path into a dependable executive-facing system.",
+      "Maintained 99.99% uptime while enabling suspicious transaction tracing across 7 global regions."
+    ],
     tags: ["Snowflake", "Kafka", "Tableau", "Kubernetes"]
   },
   {
@@ -11,6 +16,11 @@ const projects = [
     category: "analytics",
     summary: "Architected AML data pipelines and feature engineering workflows for 15M+ daily banking transactions.",
     outcome: "Reduced suspicious activity detection latency by 78%, improved model accuracy by 32%, lowered manual review cycles by 45%, and saved $150K annually through Redshift migration.",
+    impacts: [
+      "Reduced suspicious activity detection latency by 78% across 15M+ daily transactions, giving risk teams faster signal when timing mattered most.",
+      "Improved AML model accuracy by 32% and achieved an F1 score of 0.85, strengthening the bridge between data engineering and production ML.",
+      "Lowered manual review cycles by 45% and contributed to $150K in annual savings through cloud data platform optimization."
+    ],
     tags: ["Snowflake", "Kafka", "Airflow", "XGBoost"]
   },
   {
@@ -18,6 +28,11 @@ const projects = [
     category: "architecture",
     summary: "Modernized legacy ETL to AWS, Snowflake, Apache Iceberg, Glue, PySpark, SageMaker, MLflow, and Kubernetes.",
     outcome: "Reduced data processing time by 6 hours, improved query performance by 5x, supported 300+ concurrent workloads, and improved inference response time by 35%.",
+    impacts: [
+      "Reduced data processing time by 6 hours, creating faster feedback loops for analytics and operational decision-making.",
+      "Improved large-table query performance by 5x while supporting 300+ concurrent workloads on AWS lakehouse architecture.",
+      "Improved inference response time by 35% by connecting data modernization with MLflow, SageMaker, Docker, Kubernetes, and EKS delivery patterns."
+    ],
     tags: ["AWS", "Iceberg", "Snowflake", "MLflow"]
   },
   {
@@ -25,6 +40,11 @@ const projects = [
     category: "modernization",
     summary: "Led Snowflake migration for a 100TB risk management warehouse with encryption, lineage, and audit documentation.",
     outcome: "Reduced audit exceptions by 45% while supporting bankruptcy takeover data from insurance companies across multiple states.",
+    impacts: [
+      "Modernized a 100TB risk management warehouse into Snowflake with encryption, lineage, and audit-ready controls.",
+      "Reduced audit exceptions by 45%, converting governance from a reactive cleanup activity into a trusted operating layer.",
+      "Supported bankruptcy takeover datasets across multiple states, where accuracy, traceability, and regulatory confidence were non-negotiable."
+    ],
     tags: ["Snowflake", "Collibra", "Encryption", "Governance"]
   },
   {
@@ -32,6 +52,11 @@ const projects = [
     category: "modernization",
     summary: "Consolidated 30 systems into Snowflake and built real-time ingestion using Kafka Connect, Iceberg, S3, and Airflow.",
     outcome: "Reduced report generation time by 50%, processed 5TB daily, reduced manual refresh work by 90%, and cut audit findings by 90%.",
+    impacts: [
+      "Consolidated 30 systems into Snowflake and AWS patterns, reducing report generation time by 50%.",
+      "Processed 5TB daily through Kafka, Iceberg, S3, and Airflow while reducing manual refresh effort by 90%.",
+      "Cut audit findings by 90%, giving stakeholders more confidence in access controls, lineage, and repeatable data operations."
+    ],
     tags: ["Snowflake", "AWS Glue", "Kafka", "Airflow"]
   },
   {
@@ -39,6 +64,11 @@ const projects = [
     category: "architecture",
     summary: "Delivered insurance data migration, regulatory reporting, Snowflake adoption, PL/SQL testing, and Informatica tuning.",
     outcome: "Reduced claim processing from 14 hours to 3 hours, delivered 115% first-year ROI, cut query execution by 40%, reduced problem tickets by 35%, and improved ETL ingestion by 60%.",
+    impacts: [
+      "Reduced claim processing from 14 hours to 3 hours, creating a visible operational win for insurance workflows.",
+      "Delivered 115% first-year ROI and cut query execution time by 40% through Snowflake migration and reporting modernization.",
+      "Reduced problem tickets by 35% and improved ETL ingestion by 60%, showing strength in both data quality and platform reliability."
+    ],
     tags: ["ADF", "Snowflake", "SSIS", "Informatica"]
   }
 ];
@@ -107,9 +137,11 @@ function selectProject(project) {
   projectDetail.innerHTML = `
     <div>
       <h3>${project.title}</h3>
-      <p>${project.outcome}</p>
+      <p class="detail-summary">${project.outcome}</p>
+      <ul class="impact-list">
+        ${project.impacts.map((impact) => `<li>${impact}</li>`).join("")}
+      </ul>
     </div>
-    <a class="button secondary" href="https://github.com/techlock77">See GitHub</a>
   `;
   renderProjects();
   showToast(`${project.title} selected`);
@@ -171,11 +203,17 @@ document.querySelectorAll("[data-count]").forEach((counter) => {
   requestAnimationFrame(tick);
 });
 
-document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
+function animateSpeedGauge(gauge) {
   const target = Number(gauge.dataset.speedTarget || 80);
   const counter = gauge.querySelector("[data-speed-count]");
   const start = performance.now();
   const duration = 1100;
+
+  gauge.style.setProperty("--gauge-progress", "0%");
+  gauge.style.setProperty("--needle-rotation", "-135deg");
+  if (counter) {
+    counter.textContent = "0";
+  }
 
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
@@ -195,6 +233,13 @@ document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
   }
 
   requestAnimationFrame(tick);
+}
+
+document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
+  gauge.style.setProperty("--gauge-progress", "0%");
+  gauge.style.setProperty("--needle-rotation", "-135deg");
+  setTimeout(() => animateSpeedGauge(gauge), 650);
+  setInterval(() => animateSpeedGauge(gauge), 3400);
 });
 
 function updateScrollProgress() {
