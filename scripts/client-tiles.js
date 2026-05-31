@@ -117,6 +117,14 @@ let revealObserver;
 let animationObserver;
 let dashboardAnimationFrame;
 
+function scheduleAnimationFrame(callback) {
+  if (window.requestAnimationFrame) {
+    return window.requestAnimationFrame(callback);
+  }
+
+  return window.setTimeout(() => callback(window.performance?.now?.() || Date.now()), 16);
+}
+
 const clientImpacts = {
   "Hyatt": {
     title: "Hyatt: Real-time lineage, compliance, and analytics reliability",
@@ -376,11 +384,11 @@ document.querySelectorAll("[data-count]").forEach((counter) => {
     const progress = Math.min((now - start) / duration, 1);
     counter.textContent = Math.round(target * progress);
     if (progress < 1) {
-      requestAnimationFrame(tick);
+      scheduleAnimationFrame(tick);
     }
   }
 
-  requestAnimationFrame(tick);
+  scheduleAnimationFrame(tick);
 });
 
 function animateSpeedGauge(gauge) {
@@ -407,11 +415,11 @@ function animateSpeedGauge(gauge) {
     }
 
     if (progress < 1) {
-      requestAnimationFrame(tick);
+      scheduleAnimationFrame(tick);
     }
   }
 
-  requestAnimationFrame(tick);
+  scheduleAnimationFrame(tick);
 }
 
 document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
@@ -514,7 +522,6 @@ function startDashboardAnimation(dashboard) {
   const costBars = [...dashboard.querySelectorAll(".cost-segment")];
   const phases = [0, 0.28, 0.56];
   const duration = 3200;
-
   function pointOnCubic(p0, p1, p2, p3, t) {
     const oneMinusT = 1 - t;
     return {
@@ -523,26 +530,31 @@ function startDashboardAnimation(dashboard) {
     };
   }
 
-  function tangentOnCubic(p0, p1, p2, p3, t) {
-    const oneMinusT = 1 - t;
-    return {
-      x: 3 * oneMinusT ** 2 * (p1.x - p0.x) + 6 * oneMinusT * t * (p2.x - p1.x) + 3 * t ** 2 * (p3.x - p2.x),
-      y: 3 * oneMinusT ** 2 * (p1.y - p0.y) + 6 * oneMinusT * t * (p2.y - p1.y) + 3 * t ** 2 * (p3.y - p2.y)
-    };
+  function getFallbackPathMetrics(segments) {
+    const samples = [];
+    let length = 0;
+
+    segments.forEach((segment) => {
+      const [p0, p1, p2, p3] = segment;
+      let previous = p0;
+
+      for (let step = 1; step <= 24; step += 1) {
+        const point = pointOnCubic(p0, p1, p2, p3, step / 24);
+        length += Math.hypot(point.x - previous.x, point.y - previous.y);
+        samples.push({ point, length });
+        previous = point;
+      }
+    });
+
+    return { length, samples };
   }
 
-  function estimateCubicLength(segment) {
-    const [p0, p1, p2, p3] = segment;
-    let length = 0;
-    let previousPoint = p0;
-
-    for (let step = 1; step <= 18; step += 1) {
-      const point = pointOnCubic(p0, p1, p2, p3, step / 18);
-      length += Math.hypot(point.x - previousPoint.x, point.y - previousPoint.y);
-      previousPoint = point;
+  function getFallbackPointAtLength(samples, distance) {
+    if (!samples.length) {
+      return { x: 0, y: 0 };
     }
 
-    return length;
+    return samples.find((sample) => sample.length >= distance)?.point || samples[samples.length - 1].point;
   }
 
   function frame(now) {
@@ -611,34 +623,23 @@ function startDashboardAnimation(dashboard) {
         costCurveGuide?.setAttribute("d", curvePath);
       }
 
-      const segmentLengths = costSegments.map(estimateCubicLength);
-      const pathLength = segmentLengths.reduce((total, length) => total + length, 0);
+      const hasNativePathMetrics = typeof costCurve.getTotalLength === "function" && typeof costCurve.getPointAtLength === "function";
+      const fallbackMetrics = hasNativePathMetrics ? null : getFallbackPathMetrics(costSegments);
+      const pathLength = hasNativePathMetrics ? costCurve.getTotalLength() : fallbackMetrics.length;
       const traveled = progress * pathLength;
-      let accumulatedLength = 0;
-      let segmentIndex = 0;
-
-      while (segmentIndex < segmentLengths.length - 1 && accumulatedLength + segmentLengths[segmentIndex] < traveled) {
-        accumulatedLength += segmentLengths[segmentIndex];
-        segmentIndex += 1;
-      }
-
-      const segmentProgress = segmentLengths[segmentIndex]
-        ? (traveled - accumulatedLength) / segmentLengths[segmentIndex]
-        : 0;
-      const [p0, p1, p2, p3] = costSegments[segmentIndex];
-      const pathPoint = pointOnCubic(p0, p1, p2, p3, segmentProgress);
-      const tangent = tangentOnCubic(p0, p1, p2, p3, segmentProgress);
-      const curveAngle = Math.atan2(tangent.y, tangent.x) * 180 / Math.PI;
+      const pathPoint = hasNativePathMetrics
+        ? costCurve.getPointAtLength(traveled)
+        : getFallbackPointAtLength(fallbackMetrics.samples, traveled);
       costTarget.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
       costTarget.style.setProperty("--cost-path-length", pathLength.toFixed(1));
       costTarget.style.setProperty("--cost-path-offset", (pathLength - traveled).toFixed(1));
-      costDrop.setAttribute("transform", `translate(${pathPoint.x.toFixed(2)} ${pathPoint.y.toFixed(2)}) rotate(${Math.round(curveAngle - 45)})`);
+      costDrop.setAttribute("transform", `translate(${pathPoint.x.toFixed(2)} ${pathPoint.y.toFixed(2)})`);
     }
 
-    dashboardAnimationFrame = requestAnimationFrame(frame);
+    dashboardAnimationFrame = scheduleAnimationFrame(frame);
   }
 
-  dashboardAnimationFrame = requestAnimationFrame(frame);
+  dashboardAnimationFrame = scheduleAnimationFrame(frame);
 }
 
 const savedTheme = localStorage.getItem("portfolio-theme");

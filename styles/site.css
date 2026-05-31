@@ -827,6 +827,10 @@ h3 {
   stroke-width: 1.5;
 }
 
+.cost-drop-glow {
+  fill: color-mix(in srgb, var(--accent-soft) 64%, transparent);
+}
+
 .cost-drop-highlight {
   fill: color-mix(in srgb, #ffffff 82%, transparent);
   opacity: 0.9;
