@@ -1,6 +1,8 @@
 const projects = [
   {
     title: "Hyatt: Real-Time Compliance and Guest Data Lineage",
+    client: "Hyatt",
+    projectName: "Real-Time Compliance and Guest Data Lineage",
     category: "data-platform",
     focus: ["data-platform", "modernization"],
     summary: "Built near real-time lineage and compliance pipelines across Kafka, S3, Snowflake, Tableau, and Kubernetes.",
@@ -14,6 +16,8 @@ const projects = [
   },
   {
     title: "TD Bank: AML Risk Monitoring and MLOps",
+    client: "TD Bank",
+    projectName: "AML Risk Monitoring and MLOps",
     category: "mlops",
     focus: ["mlops", "ai", "data-platform"],
     summary: "Architected AML data pipelines and feature engineering workflows for 15M+ daily banking transactions.",
@@ -27,6 +31,8 @@ const projects = [
   },
   {
     title: "Accenture / Bridgestone: AWS Lakehouse Modernization",
+    client: "Accenture / Bridgestone",
+    projectName: "AWS Lakehouse Modernization",
     category: "mlops",
     focus: ["mlops", "ai", "modernization", "data-platform"],
     summary: "Modernized legacy ETL to AWS, Snowflake, Apache Iceberg, Glue, PySpark, SageMaker, MLflow, and Kubernetes.",
@@ -40,6 +46,8 @@ const projects = [
   },
   {
     title: "FL-DFS: Insurance Risk Warehouse Modernization",
+    client: "FL-DFS",
+    projectName: "Insurance Risk Warehouse Modernization",
     category: "modernization",
     focus: ["modernization", "data-platform"],
     summary: "Led Snowflake migration for a 100TB risk management warehouse with encryption, lineage, and audit documentation.",
@@ -53,6 +61,8 @@ const projects = [
   },
   {
     title: "Ryder: Governance Automation and Self-Service Analytics",
+    client: "Ryder",
+    projectName: "Governance Automation and Self-Service Analytics",
     category: "modernization",
     focus: ["modernization", "data-platform"],
     summary: "Consolidated 30 systems into Snowflake and built real-time ingestion using Kafka Connect, Iceberg, S3, and Airflow.",
@@ -66,6 +76,8 @@ const projects = [
   },
   {
     title: "Windhaven and 3M: Migration, Quality, and ETL Optimization",
+    client: "Windhaven and 3M",
+    projectName: "Migration, Quality, and ETL Optimization",
     category: "modernization",
     focus: ["modernization", "data-platform"],
     summary: "Delivered insurance data migration, regulatory reporting, Snowflake adoption, PL/SQL testing, and Informatica tuning.",
@@ -97,13 +109,6 @@ let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
 let revealObserver;
-
-const categoryIcons = {
-  "data-platform": "DP",
-  mlops: "ML",
-  ai: "AI",
-  modernization: "MZ"
-};
 
 const clientImpacts = {
   "Hyatt": {
@@ -195,8 +200,8 @@ function renderProjects() {
     }
 
     card.innerHTML = `
-      <span class="project-icon">${categoryIcons[project.category] || "DE"}</span>
-      <h3>${project.title}</h3>
+      <span class="project-client">${project.client}</span>
+      <h3>${project.projectName}</h3>
       <p>${project.summary}</p>
       <span class="tag-row">
         ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}

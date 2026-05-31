@@ -995,23 +995,22 @@ h3 {
 .project-card {
   display: grid;
   min-height: 220px;
-  padding: 20px;
+  padding: 22px;
   text-align: left;
   color: inherit;
 }
 
-.project-icon {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  margin-bottom: 16px;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--accent-soft);
+.project-client {
+  display: block;
+  width: 100%;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
   color: var(--accent-strong);
-  font-size: 0.76rem;
+  font-size: 1.08rem;
   font-weight: 850;
-  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .project-card:hover,
@@ -1026,6 +1025,9 @@ h3 {
 
 .project-card h3 {
   margin-bottom: 10px;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  text-align: left;
 }
 
 .project-card p {
