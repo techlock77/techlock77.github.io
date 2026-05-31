@@ -575,21 +575,22 @@ h3 {
 .deployment-gauge {
   display: grid;
   position: relative;
-  width: 96px;
-  height: 96px;
+  width: 108px;
+  height: 108px;
   place-items: center;
   border-radius: 50%;
   --gauge-progress: 0%;
-  --needle-rotation: -135deg;
+  --arrow-rotation: -90deg;
+  --arrow-scale: 0.58;
   background:
-    conic-gradient(var(--signal) 0 var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
+    conic-gradient(from -90deg, #ffbd22 0 var(--gauge-progress), #f33a3a var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
 }
 
 .deployment-gauge::before {
   content: "";
   position: absolute;
-  width: 66px;
-  height: 66px;
+  width: 74px;
+  height: 74px;
   border-radius: 50%;
   background: var(--surface);
 }
@@ -608,41 +609,26 @@ h3 {
 
 .gauge-needle {
   position: absolute;
-  left: calc(50% - 2px);
-  bottom: 50%;
+  inset: 0;
   z-index: 3;
-  width: 4px;
-  height: 38px;
-  border-radius: 999px;
-  background: var(--accent-strong);
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--accent) 32%, transparent);
-  transform: rotate(var(--needle-rotation));
-  transform-origin: 50% 100%;
+  border-radius: 50%;
+  transform: rotate(var(--arrow-rotation));
+  transform-origin: 50% 50%;
 }
 
 .gauge-needle::after {
   content: "";
   position: absolute;
   left: 50%;
-  top: -7px;
+  top: -6px;
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 10px solid var(--accent-strong);
-  transform: translateX(-50%);
-}
-
-.gauge-needle::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -7px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent-strong);
-  transform: translateX(-50%);
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 24px solid #f33a3a;
+  filter: drop-shadow(0 9px 12px rgba(243, 58, 58, 0.28));
+  transform: translateX(-50%) rotate(38deg) scale(var(--arrow-scale));
+  transform-origin: 50% 80%;
 }
 
 .cost-bars {
