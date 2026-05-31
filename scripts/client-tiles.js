@@ -194,7 +194,7 @@ function renderProjects() {
     const card = document.createElement("button");
     card.type = "button";
     card.className = "project-card";
-    card.setAttribute("aria-label", `View details for ${project.title}`);
+    card.setAttribute("aria-label", `Explore impact for ${project.title}`);
     if (project.title === activeProjectTitle) {
       card.classList.add("active");
     }
@@ -206,7 +206,7 @@ function renderProjects() {
         ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </span>
       <span class="project-client">${project.client}</span>
-      <span class="card-action">View details</span>
+      <span class="card-action">Explore impact</span>
     `;
 
     card.addEventListener("click", () => selectProject(project));
