@@ -519,11 +519,25 @@ function startDashboardAnimation(dashboard) {
     if (costArrow) {
       const progress = (now / 2800) % 1;
       const opacity = progress < 0.16 ? progress / 0.16 : progress > 0.84 ? (1 - progress) / 0.16 : 1;
-      const curveY = (1 - Math.exp(-5 * progress)) / (1 - Math.exp(-5));
-      const curveAngle = 68 - (curveY * 58);
+      const costPoints = [
+        { x: 14.5, y: 13.7 },
+        { x: 33.5, y: 39.7 },
+        { x: 52.5, y: 54.8 },
+        { x: 71.5, y: 61.6 },
+        { x: 89.5, y: 65.8 }
+      ];
+      const scaledProgress = progress * (costPoints.length - 1);
+      const pointIndex = Math.min(costPoints.length - 2, Math.floor(scaledProgress));
+      const segmentProgress = scaledProgress - pointIndex;
+      const startPoint = costPoints[pointIndex];
+      const endPoint = costPoints[pointIndex + 1];
+      const smoothProgress = segmentProgress * segmentProgress * (3 - 2 * segmentProgress);
+      const curveX = startPoint.x + (endPoint.x - startPoint.x) * smoothProgress;
+      const curveY = startPoint.y + (endPoint.y - startPoint.y) * smoothProgress;
+      const curveAngle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x) * 180 / Math.PI;
       const costTarget = costArrow.parentElement || costArrow;
-      costTarget.style.setProperty("--cost-arrow-left", `${Math.round(10 + progress * 80)}%`);
-      costTarget.style.setProperty("--cost-arrow-top", `${Math.round(12 + curveY * 68)}%`);
+      costTarget.style.setProperty("--cost-arrow-left", `${curveX.toFixed(1)}%`);
+      costTarget.style.setProperty("--cost-arrow-top", `${curveY.toFixed(1)}%`);
       costTarget.style.setProperty("--cost-arrow-angle", `${Math.round(curveAngle)}deg`);
       costTarget.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
       costTarget.style.setProperty("--cost-path-offset", String(Math.round(240 - progress * 240)));

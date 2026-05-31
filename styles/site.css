@@ -788,7 +788,7 @@ h3 {
 .cost-curve {
   position: absolute;
   inset: 10px 12px 14px;
-  z-index: 2;
+  z-index: 3;
   overflow: visible;
   pointer-events: none;
 }
@@ -801,7 +801,7 @@ h3 {
 }
 
 .cost-curve-guide {
-  stroke: color-mix(in srgb, var(--accent) 20%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 28%, transparent);
   stroke-dasharray: 5 9;
   stroke-width: 3;
 }
@@ -817,6 +817,7 @@ h3 {
 .cost-segment {
   display: block;
   position: absolute;
+  z-index: 2;
   left: var(--x);
   bottom: 14px;
   width: 13%;
@@ -860,7 +861,7 @@ h3 {
   position: absolute;
   left: var(--cost-arrow-left, 10%);
   top: var(--cost-arrow-top, 12%);
-  z-index: 3;
+  z-index: 4;
   width: 24px;
   height: 24px;
   border-radius: 999px 999px 999px 4px;
