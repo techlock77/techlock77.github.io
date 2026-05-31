@@ -231,7 +231,8 @@ function selectProject(project) {
 
 function openProjectModal() {
   projectModal.hidden = false;
-  requestAnimationFrame(() => projectModal.classList.add("visible"));
+  projectModal.getBoundingClientRect();
+  projectModal.classList.add("visible");
 }
 
 function closeProjectModal() {
