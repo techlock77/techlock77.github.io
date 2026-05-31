@@ -97,7 +97,6 @@ const themeToggle = document.querySelector("#themeToggle");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector("#navLinks");
 const clientNote = document.querySelector("#clientNote");
-const toast = document.querySelector("#toast");
 const scrollProgress = document.querySelector("#scrollProgress");
 const clientPopup = document.querySelector("#clientPopup");
 const clientPopupTitle = document.querySelector("#clientPopupTitle");
@@ -111,7 +110,6 @@ const projectModalList = document.querySelector("#projectModalList");
 const projectModalClose = document.querySelector(".project-modal-close");
 let activeFilter = "all";
 let activeProjectTitle = "";
-let toastTimer;
 let revealObserver;
 
 const clientImpacts = {
@@ -180,13 +178,6 @@ const clientImpacts = {
   }
 };
 
-function showToast(message) {
-  clearTimeout(toastTimer);
-  toast.textContent = message;
-  toast.classList.add("visible");
-  toastTimer = setTimeout(() => toast.classList.remove("visible"), 2200);
-}
-
 function renderProjects() {
   const visibleProjects = projects.filter((project) => {
     return activeFilter === "all" || project.focus.includes(activeFilter);
@@ -204,12 +195,12 @@ function renderProjects() {
     }
 
     card.innerHTML = `
-      <span class="project-client">${project.client}</span>
       <h3>${project.projectName}</h3>
       <p>${project.summary}</p>
       <span class="tag-row">
         ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </span>
+      <span class="project-client">${project.client}</span>
     `;
 
     card.addEventListener("click", () => selectProject(project));
@@ -226,10 +217,10 @@ function selectProject(project) {
   projectModalList.innerHTML = project.impacts.map((impact) => `<li>${impact}</li>`).join("");
   openProjectModal();
   renderProjects();
-  showToast(`${project.title} selected`);
 }
 
 function openProjectModal() {
+  closeClientPopup();
   projectModal.hidden = false;
   projectModal.getBoundingClientRect();
   projectModal.classList.add("visible");
@@ -260,11 +251,21 @@ filterButtons.forEach((button) => {
 });
 
 function closeClientPopup() {
-  clientPopup.hidden = true;
+  if (clientPopup.hidden) {
+    return;
+  }
+
+  clientPopup.classList.remove("visible");
+  window.setTimeout(() => {
+    if (!clientPopup.classList.contains("visible")) {
+      clientPopup.hidden = true;
+    }
+  }, 190);
   document.querySelectorAll(".client-tile").forEach((item) => item.classList.remove("active"));
 }
 
 function showClientPopup(clientName) {
+  closeProjectModal();
   const content = clientImpacts[clientName];
   if (!content) {
     return;
@@ -274,6 +275,8 @@ function showClientPopup(clientName) {
   clientPopupSummary.textContent = content.summary;
   clientPopupList.innerHTML = content.impacts.map((impact) => `<li>${impact}</li>`).join("");
   clientPopup.hidden = false;
+  clientPopup.getBoundingClientRect();
+  clientPopup.classList.add("visible");
 }
 
 document.querySelector("#clients").addEventListener("click", (event) => {
@@ -285,13 +288,14 @@ document.querySelector("#clients").addEventListener("click", (event) => {
   event.stopPropagation();
   document.querySelectorAll(".client-tile").forEach((item) => item.classList.remove("active"));
   tile.classList.add("active");
-  clientNote.textContent = `${tile.dataset.client} highlighted in the client matrix.`;
+  clientNote.textContent = `${tile.dataset.client} impact opened.`;
   showClientPopup(tile.dataset.client);
-  showToast(`${tile.dataset.client} highlighted`);
 });
 
 clientPopup.addEventListener("click", (event) => {
-  event.stopPropagation();
+  if (event.target === clientPopup) {
+    closeClientPopup();
+  }
 });
 
 clientPopupClose.addEventListener("click", closeClientPopup);
@@ -300,12 +304,6 @@ projectModalClose.addEventListener("click", closeProjectModal);
 projectModal.addEventListener("click", (event) => {
   if (event.target === projectModal) {
     closeProjectModal();
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (!event.target.closest(".client-popup") && !event.target.closest(".client-tile")) {
-    closeClientPopup();
   }
 });
 
@@ -394,6 +392,8 @@ function updateScrollProgress() {
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   const percent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
   scrollProgress.style.width = `${Math.min(percent, 100)}%`;
+  closeClientPopup();
+  closeProjectModal();
 }
 
 function setupReveal() {
