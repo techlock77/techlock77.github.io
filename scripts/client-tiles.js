@@ -92,7 +92,6 @@ const projects = [
 ];
 
 const projectGrid = document.querySelector("#projectGrid");
-const projectDetail = document.querySelector("#projectDetail");
 const filterButtons = document.querySelectorAll(".filter-button");
 const themeToggle = document.querySelector("#themeToggle");
 const navToggle = document.querySelector(".nav-toggle");
@@ -105,6 +104,11 @@ const clientPopupTitle = document.querySelector("#clientPopupTitle");
 const clientPopupSummary = document.querySelector("#clientPopupSummary");
 const clientPopupList = document.querySelector("#clientPopupList");
 const clientPopupClose = document.querySelector(".client-popup-close");
+const projectModal = document.querySelector("#projectModal");
+const projectModalTitle = document.querySelector("#projectModalTitle");
+const projectModalSummary = document.querySelector("#projectModalSummary");
+const projectModalList = document.querySelector("#projectModalList");
+const projectModalClose = document.querySelector(".project-modal-close");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
@@ -217,17 +221,30 @@ function renderProjects() {
 
 function selectProject(project) {
   activeProjectTitle = project.title;
-  projectDetail.innerHTML = `
-    <div>
-      <h3>${project.title}</h3>
-      <p class="detail-summary">${project.outcome}</p>
-      <ul class="impact-list">
-        ${project.impacts.map((impact) => `<li>${impact}</li>`).join("")}
-      </ul>
-    </div>
-  `;
+  projectModalTitle.textContent = `${project.client}: ${project.projectName}`;
+  projectModalSummary.textContent = project.outcome;
+  projectModalList.innerHTML = project.impacts.map((impact) => `<li>${impact}</li>`).join("");
+  openProjectModal();
   renderProjects();
   showToast(`${project.title} selected`);
+}
+
+function openProjectModal() {
+  projectModal.hidden = false;
+  requestAnimationFrame(() => projectModal.classList.add("visible"));
+}
+
+function closeProjectModal() {
+  if (projectModal.hidden) {
+    return;
+  }
+
+  projectModal.classList.remove("visible");
+  window.setTimeout(() => {
+    if (!projectModal.classList.contains("visible")) {
+      projectModal.hidden = true;
+    }
+  }, 190);
 }
 
 filterButtons.forEach((button) => {
@@ -277,6 +294,13 @@ clientPopup.addEventListener("click", (event) => {
 });
 
 clientPopupClose.addEventListener("click", closeClientPopup);
+projectModalClose.addEventListener("click", closeProjectModal);
+
+projectModal.addEventListener("click", (event) => {
+  if (event.target === projectModal) {
+    closeProjectModal();
+  }
+});
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".client-popup") && !event.target.closest(".client-tile")) {
@@ -287,6 +311,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeClientPopup();
+    closeProjectModal();
   }
 });
 

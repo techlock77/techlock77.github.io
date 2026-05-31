@@ -1106,6 +1106,76 @@ h3 {
   box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-soft) 72%, transparent);
 }
 
+.project-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: color-mix(in srgb, var(--bg) 46%, transparent);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.project-modal[hidden] {
+  display: none;
+}
+
+.project-modal.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project-modal-card {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: min(82vh, 760px);
+  overflow: auto;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--accent-soft) 36%, transparent)),
+    var(--surface);
+  box-shadow: 0 30px 70px rgba(7, 21, 29, 0.22);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 180ms ease;
+}
+
+.project-modal.visible .project-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.project-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.project-modal-card h3 {
+  max-width: 760px;
+  margin-bottom: 12px;
+  font-size: clamp(1.7rem, 3vw, 2.45rem);
+  line-height: 1.05;
+}
+
+.project-modal .impact-list {
+  margin-top: 18px;
+}
+
 .client-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
