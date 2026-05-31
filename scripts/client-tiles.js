@@ -111,6 +111,8 @@ const projectModalClose = document.querySelector(".project-modal-close");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let revealObserver;
+let animationObserver;
+let dashboardAnimationFrame;
 
 const clientImpacts = {
   "Hyatt": {
@@ -201,6 +203,7 @@ function renderProjects() {
         ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </span>
       <span class="project-client">${project.client}</span>
+      <span class="card-action">View details</span>
     `;
 
     card.addEventListener("click", () => selectProject(project));
@@ -423,6 +426,73 @@ function setupReveal() {
   });
 }
 
+function setupDashboardAnimations() {
+  const dashboards = document.querySelectorAll(".impact-dashboard");
+
+  if (!("IntersectionObserver" in window)) {
+    dashboards.forEach(startDashboardAnimation);
+    return;
+  }
+
+  if (!animationObserver) {
+    animationObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          startDashboardAnimation(entry.target);
+        }
+      });
+    }, { threshold: 0.28 });
+  }
+
+  dashboards.forEach((dashboard) => animationObserver.observe(dashboard));
+}
+
+function startDashboardAnimation(dashboard) {
+  if (dashboard.classList.contains("is-animating")) {
+    return;
+  }
+
+  dashboard.classList.add("is-animating");
+  const packets = [...dashboard.querySelectorAll(".data-packet")];
+  const streams = [...dashboard.querySelectorAll(".throughput-stream")];
+  const motion = dashboard.querySelector(".workload-motion");
+  const costArrow = dashboard.querySelector(".cost-arrow");
+  const phases = [0, 0.28, 0.56];
+  const duration = 3200;
+
+  function frame(now) {
+    const distance = Math.max(118, (motion?.clientWidth || 360) - 148);
+
+    packets.forEach((packet, index) => {
+      const progress = ((now / duration) + phases[index]) % 1;
+      const eased = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      const opacity = progress < 0.12 ? progress / 0.12 : progress > 0.84 ? (1 - progress) / 0.16 : 1;
+      packet.style.opacity = String(Math.max(0, Math.min(1, opacity)));
+      packet.style.transform = `translate3d(${Math.round(eased * distance)}px, 0, 0) scale(${0.86 + eased * 0.18})`;
+    });
+
+    streams.forEach((stream, index) => {
+      const progress = ((now / 2800) + phases[index]) % 1;
+      const pulse = 0.5 - Math.cos(progress * Math.PI * 2) / 2;
+      stream.style.opacity = String(0.2 + pulse * 0.48);
+      stream.style.transform = `scaleX(${0.42 + pulse * 0.58})`;
+    });
+
+    if (costArrow) {
+      const progress = (now / 2800) % 1;
+      const opacity = progress < 0.16 ? progress / 0.16 : progress > 0.84 ? (1 - progress) / 0.16 : 1;
+      costArrow.style.setProperty("--cost-arrow-x", `${Math.round(progress * 100)}%`);
+      costArrow.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
+    }
+
+    dashboardAnimationFrame = requestAnimationFrame(frame);
+  }
+
+  dashboardAnimationFrame = requestAnimationFrame(frame);
+}
+
 const savedTheme = localStorage.getItem("portfolio-theme");
 if (savedTheme) {
   document.documentElement.dataset.theme = savedTheme;
@@ -438,3 +508,4 @@ window.addEventListener("resize", updateScrollProgress);
 updateScrollProgress();
 renderProjects();
 setupReveal();
+setupDashboardAnimations();

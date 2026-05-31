@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="deployment-version" content="2026-05-31-dashboard-overlay-refine">
+  <meta name="deployment-version" content="2026-05-31-animation-overlay-center">
   <meta name="description" content="Career portfolio for Nitesh M, a senior data and MLOps engineer building real-time cloud data platforms across Snowflake, AWS, Kafka, Databricks, and Kubernetes. Contact: niteshcse77@gmail.com.">
   <meta name="author" content="Nitesh M">
   <meta name="contact" content="niteshcse77@gmail.com">
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/site.css?v=20260531-dashboard-overlay-refine">
+  <link rel="stylesheet" href="styles/site.css?v=20260531-animation-overlay-center">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -213,42 +213,40 @@
         <button class="client-tile" type="button" data-client="Hyatt">
           <img src="images/hyatt.svg" alt="Hyatt logo">
           <span>Hyatt</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="TD Bank">
           <span class="client-mark">TD</span>
           <span>TD Bank</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="Accenture / Bridgestone">
           <span class="client-mark">AB</span>
           <span>Accenture / Bridgestone</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="FL-DFS">
           <img src="images/fldfs.svg" alt="FL-DFS logo">
           <span>FL-DFS</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="Ryder">
           <img src="images/ryder.png" alt="Ryder logo">
           <span>Ryder</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="Windhaven Insurance Company">
           <img src="images/windhaven.png" alt="Windhaven Insurance Company logo">
           <span>Windhaven Insurance Company</span>
+          <span class="card-action">View details</span>
         </button>
         <button class="client-tile" type="button" data-client="3M">
           <img src="images/3m.png" alt="3M logo">
           <span>3M</span>
+          <span class="card-action">View details</span>
         </button>
       </div>
       <p class="client-note" id="clientNote">Select a client tile to view the measured impact.</p>
-      <div class="client-popup" id="clientPopup" role="dialog" aria-modal="true" aria-labelledby="clientPopupTitle" hidden>
-        <div class="client-popup-card">
-          <button class="client-popup-close" type="button" aria-label="Close client impact popup">&times;</button>
-          <p class="eyebrow" id="clientPopupEyebrow">Client impact</p>
-          <h3 id="clientPopupTitle"></h3>
-          <p id="clientPopupSummary"></p>
-          <ul class="impact-list" id="clientPopupList"></ul>
-        </div>
-      </div>
     </section>
 
     <section class="section" id="experience">
@@ -320,15 +318,6 @@
         </div>
       </div>
       <div class="project-grid" id="projectGrid"></div>
-      <div class="project-modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle" hidden>
-        <div class="project-modal-card">
-          <button class="project-modal-close" type="button" aria-label="Close project impact modal">&times;</button>
-          <p class="eyebrow">Client impact</p>
-          <h3 id="projectModalTitle"></h3>
-          <p class="detail-summary" id="projectModalSummary"></p>
-          <ul class="impact-list" id="projectModalList"></ul>
-        </div>
-      </div>
     </section>
 
     <section class="section contact-section" id="contact">
@@ -348,6 +337,26 @@
     <p>&copy; 2026 Nitesh M. Built for GitHub Pages.</p>
   </footer>
 
-  <script src="scripts/client-tiles.js?v=20260531-dashboard-overlay-refine"></script>
+  <div class="client-popup" id="clientPopup" role="dialog" aria-modal="true" aria-labelledby="clientPopupTitle" hidden>
+    <div class="client-popup-card">
+      <button class="client-popup-close" type="button" aria-label="Close client impact popup">&times;</button>
+      <p class="eyebrow" id="clientPopupEyebrow">Client impact</p>
+      <h3 id="clientPopupTitle"></h3>
+      <p id="clientPopupSummary"></p>
+      <ul class="impact-list" id="clientPopupList"></ul>
+    </div>
+  </div>
+
+  <div class="project-modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle" hidden>
+    <div class="project-modal-card">
+      <button class="project-modal-close" type="button" aria-label="Close project impact modal">&times;</button>
+      <p class="eyebrow">Client impact</p>
+      <h3 id="projectModalTitle"></h3>
+      <p class="detail-summary" id="projectModalSummary"></p>
+      <ul class="impact-list" id="projectModalList"></ul>
+    </div>
+  </div>
+
+  <script src="scripts/client-tiles.js?v=20260531-animation-overlay-center"></script>
 </body>
 </html>

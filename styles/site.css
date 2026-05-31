@@ -591,7 +591,8 @@ h3 {
   background: linear-gradient(90deg, transparent, var(--accent), var(--signal), transparent);
   opacity: 0.5;
   transform-origin: left center;
-  animation: pulseThroughput 2.8s ease-in-out infinite;
+  transform: scaleX(0.4);
+  will-change: opacity, transform;
 }
 
 .stream-one {
@@ -616,7 +617,9 @@ h3 {
   border-radius: 5px;
   background: linear-gradient(135deg, var(--accent), var(--signal));
   box-shadow: 0 10px 20px color-mix(in srgb, var(--accent) 30%, transparent);
-  animation: movePacket 3.2s cubic-bezier(0.35, 0, 0.2, 1) infinite;
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.82);
+  will-change: transform, opacity;
 }
 
 .packet-one {
@@ -747,7 +750,9 @@ h3 {
   border-top: 3px solid var(--signal);
   filter: drop-shadow(0 7px 10px color-mix(in srgb, var(--accent) 24%, transparent));
   transform: translate(-50%, -50%) rotate(45deg);
-  animation: costArrowTravel 2.8s ease-in-out infinite;
+  left: var(--cost-arrow-x, 0%);
+  opacity: var(--cost-arrow-opacity, 0);
+  will-change: left, opacity;
 }
 
 .dashboard-chips {
@@ -1064,6 +1069,7 @@ h3 {
   padding: 22px;
   text-align: left;
   color: inherit;
+  gap: 0;
 }
 
 .project-client {
@@ -1108,6 +1114,31 @@ h3 {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 18px;
+}
+
+.card-action {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-soft) 70%, transparent);
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.card-action::after {
+  content: "→";
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .tag {
@@ -1173,9 +1204,11 @@ h3 {
 .client-popup {
   position: fixed;
   inset: 0;
-  z-index: 45;
+  z-index: 100;
   display: grid;
   place-items: center;
+  width: 100vw;
+  min-height: 100dvh;
   padding: 22px;
   background: color-mix(in srgb, var(--bg) 46%, transparent);
   backdrop-filter: blur(8px);
@@ -1210,6 +1243,7 @@ h3 {
   box-shadow: 0 30px 70px rgba(7, 21, 29, 0.22);
   transform: translateY(12px) scale(0.98);
   transition: transform 180ms ease;
+  margin: auto;
 }
 
 .project-modal.visible .project-modal-card,
@@ -1306,6 +1340,12 @@ h3 {
   color: #ffffff;
 }
 
+.client-tile .card-action {
+  margin-top: 2px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+}
+
 .client-tile:hover::before,
 .client-tile:focus-visible::before,
 .client-tile.active::before {
@@ -1352,51 +1392,6 @@ h3 {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-@keyframes movePacket {
-  0% {
-    transform: translateX(0) scale(0.82);
-    opacity: 0;
-  }
-  14% {
-    opacity: 1;
-  }
-  78% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(min(300px, calc(100vw - 170px))) scale(1.08);
-    opacity: 0;
-  }
-}
-
-@keyframes pulseThroughput {
-  0%, 100% {
-    opacity: 0.18;
-    transform: scaleX(0.38);
-  }
-  45% {
-    opacity: 0.68;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes costArrowTravel {
-  0% {
-    left: 0;
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-  }
-  82% {
-    opacity: 1;
-  }
-  100% {
-    left: 100%;
-    opacity: 0;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1629,8 +1624,8 @@ h3 {
 
   .data-packet {
     left: 54px;
-    width: 26px;
-    height: 26px;
+    width: 14px;
+    height: 14px;
   }
 
   .cost-bars {
@@ -1657,4 +1652,5 @@ h3 {
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
   }
+
 }
