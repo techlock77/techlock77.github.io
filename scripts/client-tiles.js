@@ -99,6 +99,7 @@ const navLinks = document.querySelector("#navLinks");
 const sectionNav = document.querySelector(".section-nav");
 const sectionNavToggle = document.querySelector(".section-nav-toggle");
 const sectionNavLinks = document.querySelectorAll("[data-section-link]");
+const siteHeader = document.querySelector(".site-header");
 const clientNote = document.querySelector("#clientNote");
 const scrollProgress = document.querySelector("#scrollProgress");
 const clientPopup = document.querySelector("#clientPopup");
@@ -123,6 +124,43 @@ function scheduleAnimationFrame(callback) {
   }
 
   return window.setTimeout(() => callback(window.performance?.now?.() || Date.now()), 16);
+}
+
+function getScrollOffset() {
+  const headerHeight = Math.ceil(siteHeader?.getBoundingClientRect().height || 0);
+  return headerHeight + 18;
+}
+
+function syncScrollOffset() {
+  document.documentElement.style.setProperty("--scroll-offset", `${getScrollOffset()}px`);
+}
+
+function scrollToSectionId(id, pushHistory = true) {
+  const target = id === "top" ? document.querySelector("#top") : document.getElementById(id);
+
+  if (!target) {
+    return;
+  }
+
+  navLinks.classList.remove("open");
+  navToggle.setAttribute("aria-expanded", "false");
+  closeSectionNavigation();
+  syncScrollOffset();
+
+  scheduleAnimationFrame(() => {
+    const top = target.getBoundingClientRect().top + window.scrollY - getScrollOffset();
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+
+    if (pushHistory) {
+      const nextHash = id === "top" ? "#top" : `#${id}`;
+      window.history.pushState(null, "", nextHash);
+    }
+
+    window.setTimeout(updateSectionNavigation, 760);
+  });
 }
 
 const clientImpacts = {
@@ -343,10 +381,17 @@ navToggle.addEventListener("click", () => {
   navToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
-navLinks.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-    navToggle.setAttribute("aria-expanded", "false");
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    const id = link.getAttribute("href").slice(1) || "top";
+    const target = id === "top" ? document.querySelector("#top") : document.getElementById(id);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    scrollToSectionId(id);
   });
 });
 
@@ -364,8 +409,8 @@ sectionNavToggle.addEventListener("click", (event) => {
 });
 
 sectionNavLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    closeSectionNavigation();
+  link.addEventListener("click", (event) => {
+    event.stopPropagation();
   });
 });
 
@@ -440,8 +485,9 @@ function updateScrollProgress() {
 }
 
 function updateSectionNavigation() {
-  const anchorOffset = window.innerHeight * 0.32;
+  const anchorOffset = getScrollOffset() + 28;
   let activeId = "top";
+  const isAtPageEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 6;
 
   sectionNavLinks.forEach((link) => {
     const id = link.dataset.sectionLink;
@@ -451,6 +497,10 @@ function updateSectionNavigation() {
       activeId = id;
     }
   });
+
+  if (isAtPageEnd) {
+    activeId = sectionNavLinks[sectionNavLinks.length - 1]?.dataset.sectionLink || activeId;
+  }
 
   sectionNavLinks.forEach((link) => {
     const isActive = link.dataset.sectionLink === activeId;
@@ -653,7 +703,22 @@ filterButtons.forEach((button) => {
 });
 
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
-window.addEventListener("resize", updateScrollProgress);
+window.addEventListener("resize", () => {
+  syncScrollOffset();
+  updateScrollProgress();
+});
+window.addEventListener("load", () => {
+  syncScrollOffset();
+  if (window.location.hash) {
+    scrollToSectionId(window.location.hash.slice(1), false);
+  }
+});
+window.addEventListener("hashchange", () => {
+  if (window.location.hash) {
+    scrollToSectionId(window.location.hash.slice(1), false);
+  }
+});
+syncScrollOffset();
 updateScrollProgress();
 renderProjects();
 setupReveal();
