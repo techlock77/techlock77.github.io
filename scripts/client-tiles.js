@@ -334,7 +334,6 @@ function animateSpeedGauge(gauge) {
 
   gauge.style.setProperty("--gauge-progress", "0%");
   gauge.style.setProperty("--gauge-value", "0");
-  gauge.style.setProperty("--gauge-size", "92px");
   if (counter) {
     counter.textContent = "0";
   }
@@ -346,7 +345,6 @@ function animateSpeedGauge(gauge) {
 
     gauge.style.setProperty("--gauge-progress", `${value}%`);
     gauge.style.setProperty("--gauge-value", String(value));
-    gauge.style.setProperty("--gauge-size", `${92 + value * 0.22}px`);
     if (counter) {
       counter.textContent = value;
     }
@@ -362,8 +360,7 @@ function animateSpeedGauge(gauge) {
 document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
   gauge.style.setProperty("--gauge-progress", "0%");
   gauge.style.setProperty("--gauge-value", "0");
-  gauge.style.setProperty("--gauge-size", "92px");
-  setTimeout(() => animateSpeedGauge(gauge), 650);
+  setTimeout(() => animateSpeedGauge(gauge), 900);
   setInterval(() => animateSpeedGauge(gauge), 3400);
 });
 
@@ -374,7 +371,7 @@ function updateScrollProgress() {
 }
 
 function setupReveal() {
-  const revealItems = document.querySelectorAll(".section, .hero-contact, .career-card, .impact-dashboard, .impact-card, .project-card, .client-tile");
+  const revealItems = document.querySelectorAll(".section, .hero-contact, .career-card, .impact-dashboard, .project-card, .client-tile");
 
   if (!("IntersectionObserver" in window)) {
     revealItems.forEach((item) => item.classList.add("is-visible"));

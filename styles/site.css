@@ -585,16 +585,15 @@ h3 {
 .deployment-gauge {
   display: grid;
   position: relative;
-  width: var(--gauge-size);
-  height: var(--gauge-size);
+  width: 110px;
+  height: 110px;
   place-items: center;
   border-radius: 50%;
   --gauge-progress: 0%;
   --gauge-value: 0;
-  --gauge-size: 92px;
   background:
     conic-gradient(from 180deg, var(--accent) 0 var(--gauge-progress), var(--signal) var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
-  transition: width 160ms linear, height 160ms linear;
+  contain: layout paint;
 }
 
 .deployment-gauge::before {
@@ -607,14 +606,21 @@ h3 {
 }
 
 .deployment-gauge span {
+  display: inline-flex;
+  min-width: 4ch;
+  justify-content: center;
   position: relative;
   z-index: 2;
   color: var(--ink);
   font-size: 1.25rem;
   font-weight: 850;
+  font-variant-numeric: tabular-nums;
 }
 
 .deployment-gauge b {
+  display: inline-block;
+  width: 2ch;
+  text-align: right;
   font: inherit;
 }
 
