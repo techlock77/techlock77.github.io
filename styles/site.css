@@ -210,7 +210,7 @@ a {
 .hero-intro {
   display: grid;
   justify-items: center;
-  max-width: 960px;
+  max-width: none;
   margin: 0 auto;
   text-align: center;
 }
@@ -247,7 +247,7 @@ h1 {
 }
 
 .hero-headline {
-  max-width: 780px;
+  max-width: none;
   margin-bottom: 0;
   font-size: clamp(1.85rem, 3.7vw, 3rem);
   text-align: center;
@@ -265,10 +265,11 @@ h3 {
 }
 
 .hero-text {
-  max-width: 840px;
-  margin-top: 22px;
+  max-width: none;
+  margin: 22px auto 0;
   color: var(--muted);
   font-size: 1.12rem;
+  text-align: center;
 }
 
 .hero-contact {
@@ -632,13 +633,13 @@ h3 {
   content: "";
   position: absolute;
   left: 50%;
-  top: -3px;
-  width: 24px;
-  height: 22px;
+  top: -5px;
+  width: 20px;
+  height: 20px;
   background: linear-gradient(135deg, var(--accent), var(--signal));
-  clip-path: polygon(0 0, 100% 50%, 0 100%, 28% 50%);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
   filter: drop-shadow(0 9px 12px color-mix(in srgb, var(--accent) 26%, transparent));
-  transform: translateX(-50%) rotate(90deg) scale(var(--arrow-scale));
+  transform: translateX(-50%) scale(var(--arrow-scale));
   transform-origin: 50% 50%;
 }
 
@@ -654,20 +655,25 @@ h3 {
   display: block;
   border-radius: 8px 8px 4px 4px;
   background: linear-gradient(180deg, var(--accent), var(--signal));
+  transform-origin: bottom;
+  animation: costBarShift 2.8s ease-in-out infinite;
 }
 
 .cost-bars i:nth-child(1) {
   height: 62px;
   opacity: 0.45;
+  animation-delay: 0s;
 }
 
 .cost-bars i:nth-child(2) {
   height: 44px;
   opacity: 0.7;
+  animation-delay: 0.2s;
 }
 
 .cost-bars i:nth-child(3) {
   height: 26px;
+  animation-delay: 0.4s;
 }
 
 .dashboard-chips {
@@ -715,7 +721,74 @@ h3 {
 }
 
 .about-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: stretch;
+}
+
+.about-lead,
+.about-points article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.about-lead {
+  display: grid;
+  align-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+}
+
+.about-lead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 45%),
+    radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--signal) 20%, transparent), transparent 12rem);
+  pointer-events: none;
+}
+
+.about-lead > * {
+  position: relative;
+}
+
+.about-lead h3 {
+  max-width: 520px;
+  margin-bottom: 14px;
+  font-size: clamp(1.45rem, 2.6vw, 2.25rem);
+  line-height: 1.05;
+}
+
+.about-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-points article {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 220px;
+  padding: 18px;
+}
+
+.about-points strong {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.about-points h3 {
+  margin-bottom: 0;
 }
 
 .about-grid p,
@@ -1237,6 +1310,20 @@ h3 {
   }
 }
 
+@keyframes costBarShift {
+  0%, 100% {
+    transform: scaleY(1);
+    filter: saturate(0.92);
+  }
+  45% {
+    transform: scaleY(0.56);
+    filter: saturate(1.18);
+  }
+  70% {
+    transform: scaleY(0.72);
+  }
+}
+
 @media (max-width: 900px) {
   :root {
     --page-width: min(1380px, calc(100% - 32px));
@@ -1264,6 +1351,7 @@ h3 {
 
   .hero,
   .about-grid,
+  .about-points,
   .capability-grid,
   .contact-section,
   .hero-contact,
@@ -1292,6 +1380,10 @@ h3 {
   .workload-card,
   .impact-row {
     grid-template-columns: 1fr;
+  }
+
+  .about-points article {
+    min-height: auto;
   }
 }
 
