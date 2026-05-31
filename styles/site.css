@@ -592,8 +592,6 @@ h3 {
   --gauge-progress: 0%;
   --gauge-value: 0;
   --gauge-size: 92px;
-  --arrow-rotation: 180deg;
-  --arrow-scale: 0.58;
   background:
     conic-gradient(from 180deg, var(--accent) 0 var(--gauge-progress), var(--signal) var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
   transition: width 160ms linear, height 160ms linear;
@@ -620,35 +618,14 @@ h3 {
   font: inherit;
 }
 
-.gauge-needle {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  border-radius: 50%;
-  transform: rotate(var(--arrow-rotation));
-  transform-origin: 50% 50%;
-}
-
-.gauge-needle::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -5px;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, var(--accent), var(--signal));
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  filter: drop-shadow(0 9px 12px color-mix(in srgb, var(--accent) 26%, transparent));
-  transform: translateX(-50%) scale(var(--arrow-scale));
-  transform-origin: 50% 50%;
-}
-
 .cost-bars {
   display: grid;
+  position: relative;
   grid-template-columns: repeat(3, 1fr);
   align-items: end;
   gap: 7px;
   height: 66px;
+  padding-right: 22px;
 }
 
 .cost-bars i {
@@ -656,7 +633,7 @@ h3 {
   border-radius: 8px 8px 4px 4px;
   background: linear-gradient(180deg, var(--accent), var(--signal));
   transform-origin: bottom;
-  animation: costBarShift 2.8s ease-in-out infinite;
+  animation: costBarShift 1.4s ease-out 1 forwards;
 }
 
 .cost-bars i:nth-child(1) {
@@ -674,6 +651,31 @@ h3 {
 .cost-bars i:nth-child(3) {
   height: 26px;
   animation-delay: 0.4s;
+}
+
+.cost-arrow {
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  width: 3px;
+  height: 50px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--signal));
+  opacity: 0;
+  transform: translateY(-8px);
+  animation: costArrowDrop 360ms ease-out 1.55s 1 forwards;
+}
+
+.cost-arrow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 12px;
+  height: 12px;
+  border-right: 3px solid var(--signal);
+  border-bottom: 3px solid var(--signal);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .dashboard-chips {
@@ -1311,16 +1313,20 @@ h3 {
 }
 
 @keyframes costBarShift {
-  0%, 100% {
+  0% {
     transform: scaleY(1);
     filter: saturate(0.92);
   }
-  45% {
+  100% {
     transform: scaleY(0.56);
     filter: saturate(1.18);
   }
-  70% {
-    transform: scaleY(0.72);
+}
+
+@keyframes costArrowDrop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
