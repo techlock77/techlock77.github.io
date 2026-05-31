@@ -206,7 +206,7 @@ function renderProjects() {
         ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </span>
       <span class="project-client">${project.client}</span>
-      <span class="card-action">Explore impact</span>
+      <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
     `;
 
     card.addEventListener("click", () => selectProject(project));
@@ -519,8 +519,14 @@ function startDashboardAnimation(dashboard) {
     if (costArrow) {
       const progress = (now / 2800) % 1;
       const opacity = progress < 0.16 ? progress / 0.16 : progress > 0.84 ? (1 - progress) / 0.16 : 1;
-      costArrow.style.setProperty("--cost-arrow-x", `${Math.round(progress * 100)}%`);
-      costArrow.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
+      const curveY = (1 - Math.exp(-5 * progress)) / (1 - Math.exp(-5));
+      const curveAngle = 68 - (curveY * 58);
+      const costTarget = costArrow.parentElement || costArrow;
+      costTarget.style.setProperty("--cost-arrow-left", `${Math.round(10 + progress * 80)}%`);
+      costTarget.style.setProperty("--cost-arrow-top", `${Math.round(12 + curveY * 68)}%`);
+      costTarget.style.setProperty("--cost-arrow-angle", `${Math.round(curveAngle)}deg`);
+      costTarget.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
+      costTarget.style.setProperty("--cost-path-offset", String(Math.round(240 - progress * 240)));
     }
 
     dashboardAnimationFrame = requestAnimationFrame(frame);
