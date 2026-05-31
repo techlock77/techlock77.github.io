@@ -96,6 +96,9 @@ const filterButtons = document.querySelectorAll(".filter-button");
 const themeToggle = document.querySelector("#themeToggle");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector("#navLinks");
+const sectionNav = document.querySelector(".section-nav");
+const sectionNavToggle = document.querySelector(".section-nav-toggle");
+const sectionNavLinks = document.querySelectorAll("[data-section-link]");
 const clientNote = document.querySelector("#clientNote");
 const scrollProgress = document.querySelector("#scrollProgress");
 const clientPopup = document.querySelector("#clientPopup");
@@ -337,6 +340,18 @@ navLinks.querySelectorAll("a").forEach((link) => {
   });
 });
 
+sectionNavToggle.addEventListener("click", () => {
+  const isOpen = sectionNav.classList.toggle("open");
+  sectionNavToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+sectionNavLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    sectionNav.classList.remove("open");
+    sectionNavToggle.setAttribute("aria-expanded", "false");
+  });
+});
+
 document.querySelectorAll("[data-count]").forEach((counter) => {
   const target = Number(counter.dataset.count);
   const start = performance.now();
@@ -395,8 +410,29 @@ function updateScrollProgress() {
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   const percent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
   scrollProgress.style.width = `${Math.min(percent, 100)}%`;
+  updateSectionNavigation();
   closeClientPopup();
   closeProjectModal();
+}
+
+function updateSectionNavigation() {
+  const anchorOffset = window.innerHeight * 0.32;
+  let activeId = "top";
+
+  sectionNavLinks.forEach((link) => {
+    const id = link.dataset.sectionLink;
+    const target = id === "top" ? document.querySelector("#top") : document.getElementById(id);
+
+    if (target && target.getBoundingClientRect().top <= anchorOffset) {
+      activeId = id;
+    }
+  });
+
+  sectionNavLinks.forEach((link) => {
+    const isActive = link.dataset.sectionLink === activeId;
+    link.classList.toggle("active", isActive);
+    link.setAttribute("aria-current", isActive ? "true" : "false");
+  });
 }
 
 function setupReveal() {

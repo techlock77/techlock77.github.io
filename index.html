@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="deployment-version" content="2026-05-31-animation-overlay-center">
+  <meta name="deployment-version" content="2026-05-31-section-navigation">
   <meta name="description" content="Career portfolio for Nitesh M, a senior data and MLOps engineer building real-time cloud data platforms across Snowflake, AWS, Kafka, Databricks, and Kubernetes. Contact: niteshcse77@gmail.com.">
   <meta name="author" content="Nitesh M">
   <meta name="contact" content="niteshcse77@gmail.com">
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/site.css?v=20260531-animation-overlay-center">
+  <link rel="stylesheet" href="styles/site.css?v=20260531-section-navigation">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -59,6 +59,20 @@
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark</button>
     </nav>
   </header>
+
+  <aside class="section-nav" aria-label="Section navigation">
+    <button class="section-nav-toggle" type="button" aria-expanded="false" aria-controls="sectionNavLinks">
+      Sections
+    </button>
+    <nav class="section-nav-links" id="sectionNavLinks">
+      <a href="#top" data-section-link="top" data-label="Home" class="active">Home</a>
+      <a href="#about" data-section-link="about" data-label="About">About</a>
+      <a href="#clients" data-section-link="clients" data-label="Clients">Clients</a>
+      <a href="#experience" data-section-link="experience" data-label="Experience">Experience</a>
+      <a href="#projects" data-section-link="projects" data-label="Projects">Projects</a>
+      <a href="#contact" data-section-link="contact" data-label="Contact">Contact</a>
+    </nav>
+  </aside>
 
   <main id="top">
     <section class="hero">
@@ -357,6 +371,6 @@
     </div>
   </div>
 
-  <script src="scripts/client-tiles.js?v=20260531-animation-overlay-center"></script>
+  <script src="scripts/client-tiles.js?v=20260531-section-navigation"></script>
 </body>
 </html>
