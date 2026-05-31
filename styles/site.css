@@ -207,6 +207,14 @@ a {
   max-width: none;
 }
 
+.hero-intro {
+  display: grid;
+  justify-items: center;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
 .eyebrow {
   margin: 0 0 10px;
   color: var(--accent-strong);
@@ -242,6 +250,7 @@ h1 {
   max-width: 780px;
   margin-bottom: 0;
   font-size: clamp(1.85rem, 3.7vw, 3rem);
+  text-align: center;
 }
 
 h2 {
@@ -575,22 +584,25 @@ h3 {
 .deployment-gauge {
   display: grid;
   position: relative;
-  width: 108px;
-  height: 108px;
+  width: var(--gauge-size);
+  height: var(--gauge-size);
   place-items: center;
   border-radius: 50%;
   --gauge-progress: 0%;
-  --arrow-rotation: -90deg;
+  --gauge-value: 0;
+  --gauge-size: 92px;
+  --arrow-rotation: 180deg;
   --arrow-scale: 0.58;
   background:
-    conic-gradient(from -90deg, var(--accent) 0 var(--gauge-progress), var(--signal) var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
+    conic-gradient(from 180deg, var(--accent) 0 var(--gauge-progress), var(--signal) var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
+  transition: width 160ms linear, height 160ms linear;
 }
 
 .deployment-gauge::before {
   content: "";
   position: absolute;
-  width: 74px;
-  height: 74px;
+  width: calc(100% - 34px);
+  height: calc(100% - 34px);
   border-radius: 50%;
   background: var(--surface);
 }

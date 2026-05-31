@@ -325,7 +325,9 @@ function animateSpeedGauge(gauge) {
   const duration = 1100;
 
   gauge.style.setProperty("--gauge-progress", "0%");
-  gauge.style.setProperty("--arrow-rotation", "-90deg");
+  gauge.style.setProperty("--gauge-value", "0");
+  gauge.style.setProperty("--gauge-size", "92px");
+  gauge.style.setProperty("--arrow-rotation", "180deg");
   gauge.style.setProperty("--arrow-scale", "0.58");
   if (counter) {
     counter.textContent = "0";
@@ -335,10 +337,12 @@ function animateSpeedGauge(gauge) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
     const value = Math.round(target * eased);
-    const rotation = -90 + (value * 3.6);
+    const rotation = 180 + (value * 3.6);
     const arrowScale = 0.58 + (value / target) * 0.52;
 
     gauge.style.setProperty("--gauge-progress", `${value}%`);
+    gauge.style.setProperty("--gauge-value", String(value));
+    gauge.style.setProperty("--gauge-size", `${92 + value * 0.22}px`);
     gauge.style.setProperty("--arrow-rotation", `${rotation}deg`);
     gauge.style.setProperty("--arrow-scale", arrowScale.toFixed(2));
     if (counter) {
@@ -355,7 +359,9 @@ function animateSpeedGauge(gauge) {
 
 document.querySelectorAll("[data-speed-gauge]").forEach((gauge) => {
   gauge.style.setProperty("--gauge-progress", "0%");
-  gauge.style.setProperty("--arrow-rotation", "-90deg");
+  gauge.style.setProperty("--gauge-value", "0");
+  gauge.style.setProperty("--gauge-size", "92px");
+  gauge.style.setProperty("--arrow-rotation", "180deg");
   gauge.style.setProperty("--arrow-scale", "0.58");
   setTimeout(() => animateSpeedGauge(gauge), 650);
   setInterval(() => animateSpeedGauge(gauge), 3400);
