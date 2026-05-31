@@ -1195,10 +1195,127 @@ h3 {
   color: var(--accent-strong);
 }
 
-.project-grid {
+.carousel-shell {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
-  gap: 16px;
+  gap: 14px;
+}
+
+.carousel-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 18px);
+}
+
+.carousel-viewport {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 0 26px;
+  touch-action: pan-y;
+}
+
+.carousel-viewport::before,
+.carousel-viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: clamp(34px, 8vw, 104px);
+  pointer-events: none;
+}
+
+.carousel-viewport::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg), transparent);
+}
+
+.carousel-viewport::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--bg), transparent);
+}
+
+.carousel-track {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(14px, 2vw, 22px);
+  will-change: transform;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.carousel-card {
+  flex: 0 0 clamp(280px, 46vw, 520px);
+  opacity: 0.42;
+  transform: scale(0.88);
+  transition: opacity 260ms ease, transform 260ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.client-carousel .carousel-card {
+  flex-basis: clamp(250px, 38vw, 420px);
+}
+
+.carousel-card.is-active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.carousel-card.is-preview {
+  opacity: 0.68;
+  transform: scale(0.94);
+}
+
+.carousel-button {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 34% 26%, color-mix(in srgb, #ffffff 44%, transparent), transparent 38%),
+    color-mix(in srgb, var(--surface) 78%, transparent);
+  color: var(--accent-strong);
+  box-shadow: 0 16px 36px rgba(22, 51, 65, 0.1);
+  font-size: 1.85rem;
+  font-weight: 750;
+  line-height: 1;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  backdrop-filter: blur(16px);
+}
+
+.carousel-button:hover,
+.carousel-button:focus-visible {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 62%, var(--surface));
+  transform: translateY(-1px);
+}
+
+.carousel-status {
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-progress {
+  display: inline-flex;
+  min-width: 76px;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+  backdrop-filter: blur(12px);
+}
+
+.project-grid {
+  display: flex;
+  gap: clamp(14px, 2vw, 22px);
 }
 
 .project-card {
@@ -1492,9 +1609,8 @@ h3 {
 }
 
 .client-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-  gap: 18px;
+  display: flex;
+  gap: clamp(14px, 2vw, 22px);
 }
 
 .client-tile {
@@ -1777,6 +1893,43 @@ h3 {
 
   .dashboard-header {
     display: grid;
+  }
+
+  .carousel-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    z-index: 6;
+    width: 40px;
+    height: 40px;
+    font-size: 1.55rem;
+    opacity: 0.82;
+    transform: translateY(-50%);
+  }
+
+  .carousel-button:hover,
+  .carousel-button:focus-visible {
+    transform: translateY(-50%);
+  }
+
+  .carousel-prev {
+    left: 2px;
+  }
+
+  .carousel-next {
+    right: 2px;
+  }
+
+  .carousel-viewport {
+    padding: 18px 0 22px;
+  }
+
+  .carousel-card,
+  .client-carousel .carousel-card {
+    flex-basis: min(78vw, 360px);
   }
 
   .section,

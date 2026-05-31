@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="deployment-version" content="2026-05-31-section-nav-offsets">
+  <meta name="deployment-version" content="2026-05-31-client-carousels">
   <meta name="description" content="Career portfolio for Nitesh M, a senior data and MLOps engineer building real-time cloud data platforms across Snowflake, AWS, Kafka, Databricks, and Kubernetes. Contact: niteshcse77@gmail.com.">
   <meta name="author" content="Nitesh M">
   <meta name="contact" content="niteshcse77@gmail.com">
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;750;850&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/site.css?v=20260531-section-nav-offsets">
+  <link rel="stylesheet" href="styles/site.css?v=20260531-client-carousels">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -233,44 +233,55 @@
         <p class="eyebrow">Client Matrix</p>
         <h2>Enterprise environments I have supported.</h2>
       </div>
-      <div class="client-grid" aria-label="Client logos arranged in a 3 by 2 matrix">
-        <button class="client-tile" type="button" data-client="Hyatt">
-          <img src="images/hyatt.svg" alt="Hyatt logo">
-          <span>Hyatt</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="TD Bank">
-          <span class="client-mark">TD</span>
-          <span>TD Bank</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="Accenture / Bridgestone">
-          <span class="client-mark">AB</span>
-          <span>Accenture / Bridgestone</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="FL-DFS">
-          <img src="images/fldfs.svg" alt="FL-DFS logo">
-          <span>FL-DFS</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="Ryder">
-          <img src="images/ryder.png" alt="Ryder logo">
-          <span>Ryder</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="Windhaven Insurance Company">
-          <img src="images/windhaven.png" alt="Windhaven Insurance Company logo">
-          <span>Windhaven Insurance Company</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
-        <button class="client-tile" type="button" data-client="3M">
-          <img src="images/3m.png" alt="3M logo">
-          <span>3M</span>
-          <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
-        </button>
+      <div class="carousel-shell client-carousel" data-carousel="clients" aria-label="Client carousel">
+        <div class="carousel-stage">
+          <button class="carousel-button carousel-prev" type="button" data-carousel-prev="clients" aria-label="Previous client">‹</button>
+          <div class="carousel-viewport" data-carousel-viewport="clients">
+            <div class="client-grid carousel-track" data-carousel-track="clients">
+              <button class="client-tile carousel-card" type="button" data-client="Hyatt">
+                <img src="images/hyatt.svg" alt="Hyatt logo">
+                <span>Hyatt</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="TD Bank">
+                <span class="client-mark">TD</span>
+                <span>TD Bank</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="Accenture / Bridgestone">
+                <span class="client-mark">AB</span>
+                <span>Accenture / Bridgestone</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="FL-DFS">
+                <img src="images/fldfs.svg" alt="FL-DFS logo">
+                <span>FL-DFS</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="Ryder">
+                <img src="images/ryder.png" alt="Ryder logo">
+                <span>Ryder</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="Windhaven Insurance Company">
+                <img src="images/windhaven.png" alt="Windhaven Insurance Company logo">
+                <span>Windhaven Insurance Company</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+              <button class="client-tile carousel-card" type="button" data-client="3M">
+                <img src="images/3m.png" alt="3M logo">
+                <span>3M</span>
+                <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
+              </button>
+            </div>
+          </div>
+          <button class="carousel-button carousel-next" type="button" data-carousel-next="clients" aria-label="Next client">›</button>
+        </div>
+        <div class="carousel-status">
+          <span class="carousel-progress" data-carousel-progress="clients">1 of 7</span>
+        </div>
       </div>
-      <p class="client-note" id="clientNote">Select a client tile to view the measured impact.</p>
+      <p class="client-note" id="clientNote">Browse the client carousel and open any card for measured impact.</p>
     </section>
 
     <section class="section" id="experience">
@@ -341,7 +352,18 @@
           <button class="filter-button" type="button" data-filter="modernization">Modernization</button>
         </div>
       </div>
-      <div class="project-grid" id="projectGrid"></div>
+      <div class="carousel-shell project-carousel" data-carousel="projects" aria-label="Client impact carousel">
+        <div class="carousel-stage">
+          <button class="carousel-button carousel-prev" type="button" data-carousel-prev="projects" aria-label="Previous client impact">‹</button>
+          <div class="carousel-viewport" data-carousel-viewport="projects">
+            <div class="project-grid carousel-track" id="projectGrid" data-carousel-track="projects"></div>
+          </div>
+          <button class="carousel-button carousel-next" type="button" data-carousel-next="projects" aria-label="Next client impact">›</button>
+        </div>
+        <div class="carousel-status">
+          <span class="carousel-progress" data-carousel-progress="projects">1 of 6</span>
+        </div>
+      </div>
     </section>
 
     <section class="section contact-section" id="contact">
@@ -381,6 +403,6 @@
     </div>
   </div>
 
-  <script src="scripts/client-tiles.js?v=20260531-section-nav-offsets"></script>
+  <script src="scripts/client-tiles.js?v=20260531-client-carousels"></script>
 </body>
 </html>

@@ -117,6 +117,7 @@ let activeProjectTitle = "";
 let revealObserver;
 let animationObserver;
 let dashboardAnimationFrame;
+const carouselStates = new Map();
 
 function scheduleAnimationFrame(callback) {
   if (window.requestAnimationFrame) {
@@ -161,6 +162,151 @@ function scrollToSectionId(id, pushHistory = true) {
 
     window.setTimeout(updateSectionNavigation, 760);
   });
+}
+
+function getCarouselState(name) {
+  if (!carouselStates.has(name)) {
+    carouselStates.set(name, {
+      index: 0,
+      startX: 0,
+      startY: 0,
+      isPointerDown: false,
+      suppressClick: false
+    });
+  }
+
+  return carouselStates.get(name);
+}
+
+function getCarouselElements(name) {
+  const root = document.querySelector(`[data-carousel="${name}"]`);
+  const viewport = document.querySelector(`[data-carousel-viewport="${name}"]`);
+  const track = document.querySelector(`[data-carousel-track="${name}"]`);
+  const progress = document.querySelector(`[data-carousel-progress="${name}"]`);
+
+  return {
+    root,
+    viewport,
+    track,
+    progress,
+    cards: track ? [...track.querySelectorAll(".carousel-card")] : []
+  };
+}
+
+function wrapCarouselIndex(index, total) {
+  if (!total) {
+    return 0;
+  }
+
+  return (index + total) % total;
+}
+
+function updateCarousel(name) {
+  const state = getCarouselState(name);
+  const { viewport, track, progress, cards } = getCarouselElements(name);
+  const total = cards.length;
+
+  if (!viewport || !track || !total) {
+    if (progress) {
+      progress.textContent = "0 of 0";
+    }
+    return;
+  }
+
+  state.index = wrapCarouselIndex(state.index, total);
+  const activeCard = cards[state.index];
+  const gap = Number.parseFloat(window.getComputedStyle(track).columnGap || window.getComputedStyle(track).gap || "0") || 0;
+  const cardWidth = activeCard.getBoundingClientRect().width;
+  const offset = (viewport.clientWidth / 2) - (cardWidth / 2) - (state.index * (cardWidth + gap));
+
+  track.style.transform = `translate3d(${offset}px, 0, 0)`;
+
+  cards.forEach((card, index) => {
+    const previousIndex = wrapCarouselIndex(state.index - 1, total);
+    const nextIndex = wrapCarouselIndex(state.index + 1, total);
+    const isActive = index === state.index;
+    const isPreview = index === previousIndex || index === nextIndex;
+
+    card.classList.toggle("is-active", isActive);
+    card.classList.toggle("is-preview", isPreview && !isActive);
+    card.classList.toggle("active", isActive && card.classList.contains("client-tile"));
+    card.setAttribute("aria-current", isActive ? "true" : "false");
+  });
+
+  if (progress) {
+    progress.textContent = `${state.index + 1} of ${total}`;
+  }
+}
+
+function moveCarousel(name, direction) {
+  const state = getCarouselState(name);
+  const { cards } = getCarouselElements(name);
+
+  state.index = wrapCarouselIndex(state.index + direction, cards.length);
+  updateCarousel(name);
+}
+
+function setupCarousel(name) {
+  const state = getCarouselState(name);
+  const { root, viewport } = getCarouselElements(name);
+
+  if (!root || !viewport || root.dataset.carouselReady === "true") {
+    updateCarousel(name);
+    return;
+  }
+
+  root.dataset.carouselReady = "true";
+  viewport.tabIndex = 0;
+
+  document.querySelector(`[data-carousel-prev="${name}"]`)?.addEventListener("click", () => moveCarousel(name, -1));
+  document.querySelector(`[data-carousel-next="${name}"]`)?.addEventListener("click", () => moveCarousel(name, 1));
+
+  viewport.addEventListener("pointerdown", (event) => {
+    state.isPointerDown = true;
+    state.startX = event.clientX;
+    state.startY = event.clientY;
+  });
+
+  viewport.addEventListener("pointerup", (event) => {
+    if (!state.isPointerDown) {
+      return;
+    }
+
+    const deltaX = event.clientX - state.startX;
+    const deltaY = event.clientY - state.startY;
+    state.isPointerDown = false;
+
+    if (Math.abs(deltaX) > 42 && Math.abs(deltaX) > Math.abs(deltaY) * 1.35) {
+      state.suppressClick = true;
+      moveCarousel(name, deltaX < 0 ? 1 : -1);
+      window.setTimeout(() => {
+        state.suppressClick = false;
+      }, 120);
+    }
+  });
+
+  viewport.addEventListener("pointercancel", () => {
+    state.isPointerDown = false;
+  });
+
+  viewport.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      moveCarousel(name, -1);
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      moveCarousel(name, 1);
+    }
+  });
+
+  updateCarousel(name);
+}
+
+function updateCarousels() {
+  updateCarousel("clients");
+  updateCarousel("projects");
 }
 
 const clientImpacts = {
@@ -233,13 +379,14 @@ function renderProjects() {
   const visibleProjects = projects.filter((project) => {
     return activeFilter === "all" || project.focus.includes(activeFilter);
   });
+  const projectCarousel = getCarouselState("projects");
 
   projectGrid.innerHTML = "";
 
   visibleProjects.forEach((project) => {
     const card = document.createElement("button");
     card.type = "button";
-    card.className = "project-card";
+    card.className = "project-card carousel-card";
     card.setAttribute("aria-label", `Explore impact for ${project.title}`);
     if (project.title === activeProjectTitle) {
       card.classList.add("active");
@@ -255,10 +402,23 @@ function renderProjects() {
       <span class="card-action"><span class="action-radio" aria-hidden="true"></span><span>Explore impact</span></span>
     `;
 
-    card.addEventListener("click", () => selectProject(project));
+    card.addEventListener("click", () => {
+      if (!getCarouselState("projects").suppressClick) {
+        selectProject(project);
+      }
+    });
     projectGrid.appendChild(card);
   });
 
+  if (activeProjectTitle) {
+    const activeIndex = visibleProjects.findIndex((project) => project.title === activeProjectTitle);
+    if (activeIndex >= 0) {
+      projectCarousel.index = activeIndex;
+    }
+  }
+
+  projectCarousel.index = wrapCarouselIndex(projectCarousel.index, visibleProjects.length);
+  updateCarousel("projects");
   setupReveal();
 }
 
@@ -298,6 +458,8 @@ filterButtons.forEach((button) => {
       item.classList.toggle("active", item === button);
       item.setAttribute("aria-pressed", String(item === button));
     });
+    getCarouselState("projects").index = 0;
+    activeProjectTitle = "";
     renderProjects();
   });
 });
@@ -338,8 +500,14 @@ document.querySelector("#clients").addEventListener("click", (event) => {
   }
 
   event.stopPropagation();
+  if (getCarouselState("clients").suppressClick) {
+    return;
+  }
+
   document.querySelectorAll(".client-tile").forEach((item) => item.classList.remove("active"));
   tile.classList.add("active");
+  getCarouselState("clients").index = [...document.querySelectorAll(".client-tile")].indexOf(tile);
+  updateCarousel("clients");
   clientNote.textContent = `${tile.dataset.client} impact opened.`;
   showClientPopup(tile.dataset.client);
 });
@@ -705,6 +873,7 @@ filterButtons.forEach((button) => {
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
 window.addEventListener("resize", () => {
   syncScrollOffset();
+  updateCarousels();
   updateScrollProgress();
 });
 window.addEventListener("load", () => {
@@ -720,6 +889,8 @@ window.addEventListener("hashchange", () => {
 });
 syncScrollOffset();
 updateScrollProgress();
+setupCarousel("clients");
 renderProjects();
+setupCarousel("projects");
 setupReveal();
 setupDashboardAnimations();
