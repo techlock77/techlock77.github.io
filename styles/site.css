@@ -620,7 +620,7 @@ h3 {
 
 .cost-bars {
   position: relative;
-  min-height: 84px;
+  min-height: 116px;
   overflow: hidden;
   border-radius: 8px;
   background:
@@ -634,63 +634,57 @@ h3 {
   display: block;
   position: absolute;
   left: var(--x);
-  top: var(--y);
-  width: var(--w);
-  height: 14px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent), var(--signal));
+  bottom: 14px;
+  width: 22%;
+  height: var(--h);
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, var(--accent), var(--signal));
   box-shadow: 0 10px 20px color-mix(in srgb, var(--accent) 18%, transparent);
-  opacity: 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  animation: costSegmentDraw 720ms ease-out var(--delay) 1 forwards;
 }
 
 .segment-one {
-  --x: 6%;
-  --y: 18px;
-  --w: 48%;
-  --delay: 0ms;
+  --x: 9%;
+  --h: 84px;
+  opacity: 0.94;
 }
 
 .segment-two {
-  --x: 28%;
-  --y: 36px;
-  --w: 46%;
-  --delay: 220ms;
+  --x: 39%;
+  --h: 62px;
+  opacity: 0.78;
 }
 
 .segment-three {
-  --x: 48%;
-  --y: 54px;
-  --w: 42%;
-  --delay: 440ms;
+  --x: 69%;
+  --h: 40px;
+  opacity: 0.64;
 }
 
 .cost-arrow {
   position: absolute;
-  left: 6%;
-  top: 17px;
-  width: 84%;
-  height: 3px;
+  left: 19%;
+  top: 30px;
+  width: 61%;
+  height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--accent), var(--signal));
-  opacity: 0;
-  transform: rotate(14deg) scaleX(0);
+  opacity: 0.58;
+  transform: rotate(20deg);
   transform-origin: left center;
-  animation: costArrowTravel 1.15s ease-out 820ms 1 forwards;
 }
 
 .cost-arrow::after {
   content: "";
   position: absolute;
-  right: -2px;
+  left: 0;
   top: 50%;
   width: 12px;
   height: 12px;
   border-right: 3px solid var(--signal);
   border-top: 3px solid var(--signal);
-  transform: translateY(-50%) rotate(45deg);
+  filter: drop-shadow(0 7px 10px color-mix(in srgb, var(--accent) 24%, transparent));
+  transform: translate(-50%, -50%) rotate(45deg);
+  animation: costArrowTravel 2.6s ease-in-out infinite;
 }
 
 .dashboard-chips {
@@ -1327,21 +1321,20 @@ h3 {
   }
 }
 
-@keyframes costSegmentDraw {
+@keyframes costArrowTravel {
   0% {
+    left: 0;
     opacity: 0;
-    transform: scaleX(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
   }
   100% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes costArrowTravel {
-  to {
-    opacity: 1;
-    transform: rotate(14deg) scaleX(1);
+    left: 100%;
+    opacity: 0;
   }
 }
 
