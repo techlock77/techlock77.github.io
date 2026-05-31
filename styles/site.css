@@ -619,63 +619,78 @@ h3 {
 }
 
 .cost-bars {
-  display: grid;
   position: relative;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: end;
-  gap: 7px;
-  height: 66px;
-  padding-right: 22px;
+  min-height: 84px;
+  overflow: hidden;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 42%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--line) 42%, transparent) 1px, transparent 1px),
+    color-mix(in srgb, var(--surface-strong) 72%, transparent);
+  background-size: 28px 28px;
 }
 
-.cost-bars i {
+.cost-segment {
   display: block;
-  border-radius: 8px 8px 4px 4px;
-  background: linear-gradient(180deg, var(--accent), var(--signal));
-  transform-origin: bottom;
-  animation: costBarShift 1.4s ease-out 1 forwards;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--signal));
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--accent) 18%, transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: costSegmentDraw 720ms ease-out var(--delay) 1 forwards;
 }
 
-.cost-bars i:nth-child(1) {
-  height: 62px;
-  opacity: 0.45;
-  animation-delay: 0s;
+.segment-one {
+  --x: 6%;
+  --y: 18px;
+  --w: 48%;
+  --delay: 0ms;
 }
 
-.cost-bars i:nth-child(2) {
-  height: 44px;
-  opacity: 0.7;
-  animation-delay: 0.2s;
+.segment-two {
+  --x: 28%;
+  --y: 36px;
+  --w: 46%;
+  --delay: 220ms;
 }
 
-.cost-bars i:nth-child(3) {
-  height: 26px;
-  animation-delay: 0.4s;
+.segment-three {
+  --x: 48%;
+  --y: 54px;
+  --w: 42%;
+  --delay: 440ms;
 }
 
 .cost-arrow {
   position: absolute;
-  top: 5px;
-  right: 2px;
-  width: 3px;
-  height: 50px;
+  left: 6%;
+  top: 17px;
+  width: 84%;
+  height: 3px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--accent), var(--signal));
+  background: linear-gradient(90deg, var(--accent), var(--signal));
   opacity: 0;
-  transform: translateY(-8px);
-  animation: costArrowDrop 360ms ease-out 1.55s 1 forwards;
+  transform: rotate(14deg) scaleX(0);
+  transform-origin: left center;
+  animation: costArrowTravel 1.15s ease-out 820ms 1 forwards;
 }
 
 .cost-arrow::after {
   content: "";
   position: absolute;
-  left: 50%;
-  bottom: -2px;
+  right: -2px;
+  top: 50%;
   width: 12px;
   height: 12px;
   border-right: 3px solid var(--signal);
-  border-bottom: 3px solid var(--signal);
-  transform: translateX(-50%) rotate(45deg);
+  border-top: 3px solid var(--signal);
+  transform: translateY(-50%) rotate(45deg);
 }
 
 .dashboard-chips {
@@ -1312,21 +1327,21 @@ h3 {
   }
 }
 
-@keyframes costBarShift {
+@keyframes costSegmentDraw {
   0% {
-    transform: scaleY(1);
-    filter: saturate(0.92);
+    opacity: 0;
+    transform: scaleX(0);
   }
   100% {
-    transform: scaleY(0.56);
-    filter: saturate(1.18);
+    opacity: 1;
+    transform: scaleX(1);
   }
 }
 
-@keyframes costArrowDrop {
+@keyframes costArrowTravel {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: rotate(14deg) scaleX(1);
   }
 }
 
