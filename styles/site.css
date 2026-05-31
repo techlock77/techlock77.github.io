@@ -829,8 +829,7 @@ h3 {
 
 .cost-drop-highlight {
   fill: color-mix(in srgb, #ffffff 82%, transparent);
-  animation: droplet-pulse 1800ms ease-in-out infinite;
-  transform-origin: center;
+  opacity: 0.9;
 }
 
 .cost-segment {
@@ -1626,8 +1625,8 @@ h3 {
   }
 
   .section-nav {
-    right: 14px;
-    left: auto;
+    right: auto;
+    left: 14px;
     top: auto;
     bottom: 78px;
     z-index: 38;
@@ -1641,12 +1640,12 @@ h3 {
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 1px solid var(--line);
+    border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    background: color-mix(in srgb, var(--surface) 50%, transparent);
     color: var(--text);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 30px rgba(22, 51, 65, 0.12);
+    backdrop-filter: blur(16px);
     font-size: 0;
     font-weight: 850;
   }
@@ -1662,13 +1661,15 @@ h3 {
 
   .section-nav-links {
     position: absolute;
-    right: 0;
-    left: auto;
+    right: auto;
+    left: 0;
     bottom: calc(100% + 10px);
     display: none;
     width: min(210px, calc(100vw - 28px));
     max-height: min(62vh, 380px);
     overflow: auto;
+    background: color-mix(in srgb, var(--surface) 50%, transparent);
+    backdrop-filter: blur(16px);
   }
 
   .section-nav.open .section-nav-links {
@@ -1816,8 +1817,8 @@ h3 {
   }
 
   .section-nav {
-    right: 9px;
-    left: auto;
+    right: auto;
+    left: 9px;
     bottom: 72px;
   }
 

@@ -330,6 +330,8 @@ themeToggle.addEventListener("click", () => {
 
 navToggle.addEventListener("click", () => {
   const isOpen = navLinks.classList.toggle("open");
+  sectionNav.classList.remove("open");
+  sectionNavToggle.setAttribute("aria-expanded", "false");
   navToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
@@ -340,16 +342,29 @@ navLinks.querySelectorAll("a").forEach((link) => {
   });
 });
 
-sectionNavToggle.addEventListener("click", () => {
+function closeSectionNavigation() {
+  sectionNav.classList.remove("open");
+  sectionNavToggle.setAttribute("aria-expanded", "false");
+}
+
+sectionNavToggle.addEventListener("click", (event) => {
+  event.stopPropagation();
   const isOpen = sectionNav.classList.toggle("open");
+  navLinks.classList.remove("open");
+  navToggle.setAttribute("aria-expanded", "false");
   sectionNavToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
 sectionNavLinks.forEach((link) => {
   link.addEventListener("click", () => {
-    sectionNav.classList.remove("open");
-    sectionNavToggle.setAttribute("aria-expanded", "false");
+    closeSectionNavigation();
   });
+});
+
+document.addEventListener("click", (event) => {
+  if (sectionNav.classList.contains("open") && !sectionNav.contains(event.target)) {
+    closeSectionNavigation();
+  }
 });
 
 document.querySelectorAll("[data-count]").forEach((counter) => {
@@ -411,6 +426,7 @@ function updateScrollProgress() {
   const percent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
   scrollProgress.style.width = `${Math.min(percent, 100)}%`;
   updateSectionNavigation();
+  closeSectionNavigation();
   closeClientPopup();
   closeProjectModal();
 }
@@ -499,6 +515,36 @@ function startDashboardAnimation(dashboard) {
   const phases = [0, 0.28, 0.56];
   const duration = 3200;
 
+  function pointOnCubic(p0, p1, p2, p3, t) {
+    const oneMinusT = 1 - t;
+    return {
+      x: oneMinusT ** 3 * p0.x + 3 * oneMinusT ** 2 * t * p1.x + 3 * oneMinusT * t ** 2 * p2.x + t ** 3 * p3.x,
+      y: oneMinusT ** 3 * p0.y + 3 * oneMinusT ** 2 * t * p1.y + 3 * oneMinusT * t ** 2 * p2.y + t ** 3 * p3.y
+    };
+  }
+
+  function tangentOnCubic(p0, p1, p2, p3, t) {
+    const oneMinusT = 1 - t;
+    return {
+      x: 3 * oneMinusT ** 2 * (p1.x - p0.x) + 6 * oneMinusT * t * (p2.x - p1.x) + 3 * t ** 2 * (p3.x - p2.x),
+      y: 3 * oneMinusT ** 2 * (p1.y - p0.y) + 6 * oneMinusT * t * (p2.y - p1.y) + 3 * t ** 2 * (p3.y - p2.y)
+    };
+  }
+
+  function estimateCubicLength(segment) {
+    const [p0, p1, p2, p3] = segment;
+    let length = 0;
+    let previousPoint = p0;
+
+    for (let step = 1; step <= 18; step += 1) {
+      const point = pointOnCubic(p0, p1, p2, p3, step / 18);
+      length += Math.hypot(point.x - previousPoint.x, point.y - previousPoint.y);
+      previousPoint = point;
+    }
+
+    return length;
+  }
+
   function frame(now) {
     const distance = Math.max(118, (motion?.clientWidth || 360) - 148);
 
@@ -565,23 +611,27 @@ function startDashboardAnimation(dashboard) {
         costCurveGuide?.setAttribute("d", curvePath);
       }
 
-      const scaledProgress = progress * costSegments.length;
-      const segmentIndex = Math.min(costSegments.length - 1, Math.floor(scaledProgress));
-      const segmentProgress = scaledProgress - segmentIndex;
+      const segmentLengths = costSegments.map(estimateCubicLength);
+      const pathLength = segmentLengths.reduce((total, length) => total + length, 0);
+      const traveled = progress * pathLength;
+      let accumulatedLength = 0;
+      let segmentIndex = 0;
+
+      while (segmentIndex < segmentLengths.length - 1 && accumulatedLength + segmentLengths[segmentIndex] < traveled) {
+        accumulatedLength += segmentLengths[segmentIndex];
+        segmentIndex += 1;
+      }
+
+      const segmentProgress = segmentLengths[segmentIndex]
+        ? (traveled - accumulatedLength) / segmentLengths[segmentIndex]
+        : 0;
       const [p0, p1, p2, p3] = costSegments[segmentIndex];
-      const oneMinusT = 1 - segmentProgress;
-      const pathPoint = {
-        x: oneMinusT ** 3 * p0.x + 3 * oneMinusT ** 2 * segmentProgress * p1.x + 3 * oneMinusT * segmentProgress ** 2 * p2.x + segmentProgress ** 3 * p3.x,
-        y: oneMinusT ** 3 * p0.y + 3 * oneMinusT ** 2 * segmentProgress * p1.y + 3 * oneMinusT * segmentProgress ** 2 * p2.y + segmentProgress ** 3 * p3.y
-      };
-      const tangent = {
-        x: 3 * oneMinusT ** 2 * (p1.x - p0.x) + 6 * oneMinusT * segmentProgress * (p2.x - p1.x) + 3 * segmentProgress ** 2 * (p3.x - p2.x),
-        y: 3 * oneMinusT ** 2 * (p1.y - p0.y) + 6 * oneMinusT * segmentProgress * (p2.y - p1.y) + 3 * segmentProgress ** 2 * (p3.y - p2.y)
-      };
+      const pathPoint = pointOnCubic(p0, p1, p2, p3, segmentProgress);
+      const tangent = tangentOnCubic(p0, p1, p2, p3, segmentProgress);
       const curveAngle = Math.atan2(tangent.y, tangent.x) * 180 / Math.PI;
       costTarget.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
-      costTarget.style.setProperty("--cost-path-length", "240");
-      costTarget.style.setProperty("--cost-path-offset", String(Math.round(240 - progress * 240)));
+      costTarget.style.setProperty("--cost-path-length", pathLength.toFixed(1));
+      costTarget.style.setProperty("--cost-path-offset", (pathLength - traveled).toFixed(1));
       costDrop.setAttribute("transform", `translate(${pathPoint.x.toFixed(2)} ${pathPoint.y.toFixed(2)}) rotate(${Math.round(curveAngle - 45)})`);
     }
 
