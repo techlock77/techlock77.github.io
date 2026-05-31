@@ -1,7 +1,8 @@
 const projects = [
   {
     title: "Hyatt: Real-Time Compliance and Guest Data Lineage",
-    category: "analytics",
+    category: "data-platform",
+    focus: ["data-platform", "modernization"],
     summary: "Built near real-time lineage and compliance pipelines across Kafka, S3, Snowflake, Tableau, and Kubernetes.",
     outcome: "Reduced SLA breaches by 45%, cut ETL latency by 80%, enabled suspicious transaction tracing across 7 global regions, and maintained 99.99% uptime.",
     impacts: [
@@ -13,7 +14,8 @@ const projects = [
   },
   {
     title: "TD Bank: AML Risk Monitoring and MLOps",
-    category: "analytics",
+    category: "mlops",
+    focus: ["mlops", "ai", "data-platform"],
     summary: "Architected AML data pipelines and feature engineering workflows for 15M+ daily banking transactions.",
     outcome: "Reduced suspicious activity detection latency by 78%, improved model accuracy by 32%, lowered manual review cycles by 45%, and saved $150K annually through Redshift migration.",
     impacts: [
@@ -25,7 +27,8 @@ const projects = [
   },
   {
     title: "Accenture / Bridgestone: AWS Lakehouse Modernization",
-    category: "architecture",
+    category: "mlops",
+    focus: ["mlops", "ai", "modernization", "data-platform"],
     summary: "Modernized legacy ETL to AWS, Snowflake, Apache Iceberg, Glue, PySpark, SageMaker, MLflow, and Kubernetes.",
     outcome: "Reduced data processing time by 6 hours, improved query performance by 5x, supported 300+ concurrent workloads, and improved inference response time by 35%.",
     impacts: [
@@ -38,6 +41,7 @@ const projects = [
   {
     title: "FL-DFS: Insurance Risk Warehouse Modernization",
     category: "modernization",
+    focus: ["modernization", "data-platform"],
     summary: "Led Snowflake migration for a 100TB risk management warehouse with encryption, lineage, and audit documentation.",
     outcome: "Reduced audit exceptions by 45% while supporting bankruptcy takeover data from insurance companies across multiple states.",
     impacts: [
@@ -50,6 +54,7 @@ const projects = [
   {
     title: "Ryder: Governance Automation and Self-Service Analytics",
     category: "modernization",
+    focus: ["modernization", "data-platform"],
     summary: "Consolidated 30 systems into Snowflake and built real-time ingestion using Kafka Connect, Iceberg, S3, and Airflow.",
     outcome: "Reduced report generation time by 50%, processed 5TB daily, reduced manual refresh work by 90%, and cut audit findings by 90%.",
     impacts: [
@@ -61,7 +66,8 @@ const projects = [
   },
   {
     title: "Windhaven and 3M: Migration, Quality, and ETL Optimization",
-    category: "architecture",
+    category: "modernization",
+    focus: ["modernization", "data-platform"],
     summary: "Delivered insurance data migration, regulatory reporting, Snowflake adoption, PL/SQL testing, and Informatica tuning.",
     outcome: "Reduced claim processing from 14 hours to 3 hours, delivered 115% first-year ROI, cut query execution by 40%, reduced problem tickets by 35%, and improved ETL ingestion by 60%.",
     impacts: [
@@ -82,15 +88,87 @@ const navLinks = document.querySelector("#navLinks");
 const clientNote = document.querySelector("#clientNote");
 const toast = document.querySelector("#toast");
 const scrollProgress = document.querySelector("#scrollProgress");
+const clientPopup = document.querySelector("#clientPopup");
+const clientPopupTitle = document.querySelector("#clientPopupTitle");
+const clientPopupSummary = document.querySelector("#clientPopupSummary");
+const clientPopupList = document.querySelector("#clientPopupList");
+const clientPopupClose = document.querySelector(".client-popup-close");
 let activeFilter = "all";
 let activeProjectTitle = "";
 let toastTimer;
 let revealObserver;
 
 const categoryIcons = {
-  analytics: "AN",
-  architecture: "AR",
+  "data-platform": "DP",
+  mlops: "ML",
+  ai: "AI",
   modernization: "MZ"
+};
+
+const clientImpacts = {
+  "Hyatt": {
+    title: "Hyatt: Real-time lineage, compliance, and analytics reliability",
+    summary: "Built compliance-critical data flows where uptime, latency, and traceability directly affected global operations.",
+    impacts: [
+      "Cut ETL latency by 80% across Kafka, S3, Snowflake, Tableau, and Kubernetes workflows.",
+      "Reduced SLA breaches by 45%, helping teams trust the platform during high-pressure compliance windows.",
+      "Maintained 99.99% uptime while enabling suspicious transaction tracing across 7 global regions."
+    ]
+  },
+  "TD Bank": {
+    title: "TD Bank: AML monitoring, AI-ready features, and MLOps impact",
+    summary: "Built high-scale AML data and model workflows that helped risk teams act faster on millions of daily signals.",
+    impacts: [
+      "Processed 15M+ daily transactions while reducing suspicious activity detection latency by 78%.",
+      "Improved AML model accuracy by 32% with feature engineering and production ML workflows.",
+      "Reduced manual review cycles by 45% and supported $150K in annual savings through platform optimization."
+    ]
+  },
+  "Accenture / Bridgestone": {
+    title: "Accenture / Bridgestone: Lakehouse modernization with MLOps delivery",
+    summary: "Connected AWS data modernization with MLflow, SageMaker, Docker, Kubernetes, and EKS delivery practices.",
+    impacts: [
+      "Improved large-table query performance by 5x while supporting 300+ concurrent workloads.",
+      "Reduced data processing time by 6 hours through AWS, Snowflake, Iceberg, Glue, and PySpark modernization.",
+      "Improved inference response time by 35%, making the platform stronger for AI and ML workloads."
+    ]
+  },
+  "FL-DFS": {
+    title: "FL-DFS: 100TB risk warehouse with governance built in",
+    summary: "Modernized sensitive insurance risk data with Snowflake, lineage, encryption, and audit-ready controls.",
+    impacts: [
+      "Migrated a 100TB risk management warehouse into a governed Snowflake architecture.",
+      "Reduced audit exceptions by 45% by strengthening lineage, encryption, and documentation.",
+      "Supported multi-state bankruptcy takeover datasets where trust and traceability were critical."
+    ]
+  },
+  "Ryder": {
+    title: "Ryder: Logistics data consolidation and self-service analytics",
+    summary: "Turned scattered logistics systems into a governed Snowflake and AWS analytics foundation.",
+    impacts: [
+      "Consolidated 30 systems into Snowflake and reduced report generation time by 50%.",
+      "Processed 5TB daily through Kafka, Iceberg, S3, and Airflow while cutting manual refresh effort by 90%.",
+      "Reduced audit findings by 90%, giving teams more confidence in controls and repeatability."
+    ]
+  },
+  "Windhaven Insurance Company": {
+    title: "Windhaven: Insurance migration and claims acceleration",
+    summary: "Modernized insurance data movement and reporting so claims workflows became faster and more measurable.",
+    impacts: [
+      "Reduced claim processing time from 14 hours to 3 hours with ADF, Kafka, Python, and Snowflake.",
+      "Delivered 115% first-year ROI through Snowflake adoption and migration execution.",
+      "Cut query execution by 40% across reporting and regulatory workloads."
+    ]
+  },
+  "3M": {
+    title: "3M: Data quality, regression coverage, and ETL reliability",
+    summary: "Strengthened testing and ingestion reliability for enterprise data operations.",
+    impacts: [
+      "Reduced problem tickets by 35% through PL/SQL testing and regression validation.",
+      "Improved ETL ingestion time by 60% through Informatica optimization.",
+      "Helped protect downstream analytics by improving quality gates before data reached business users."
+    ]
+  }
 };
 
 function showToast(message) {
@@ -102,7 +180,7 @@ function showToast(message) {
 
 function renderProjects() {
   const visibleProjects = projects.filter((project) => {
-    return activeFilter === "all" || project.category === activeFilter;
+    return activeFilter === "all" || project.focus.includes(activeFilter);
   });
 
   projectGrid.innerHTML = "";
@@ -158,13 +236,50 @@ filterButtons.forEach((button) => {
   });
 });
 
+function closeClientPopup() {
+  clientPopup.hidden = true;
+  document.querySelectorAll(".client-tile").forEach((item) => item.classList.remove("active"));
+}
+
+function showClientPopup(clientName) {
+  const content = clientImpacts[clientName];
+  if (!content) {
+    return;
+  }
+
+  clientPopupTitle.textContent = content.title;
+  clientPopupSummary.textContent = content.summary;
+  clientPopupList.innerHTML = content.impacts.map((impact) => `<li>${impact}</li>`).join("");
+  clientPopup.hidden = false;
+}
+
 document.querySelectorAll(".client-tile").forEach((tile) => {
-  tile.addEventListener("click", () => {
+  tile.addEventListener("click", (event) => {
+    event.stopPropagation();
     document.querySelectorAll(".client-tile").forEach((item) => item.classList.remove("active"));
     tile.classList.add("active");
     clientNote.textContent = `${tile.dataset.client} highlighted in the client matrix.`;
+    showClientPopup(tile.dataset.client);
     showToast(`${tile.dataset.client} highlighted`);
   });
+});
+
+clientPopup.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+clientPopupClose.addEventListener("click", closeClientPopup);
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".client-popup") && !event.target.closest(".client-tile")) {
+    closeClientPopup();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeClientPopup();
+  }
 });
 
 themeToggle.addEventListener("click", () => {

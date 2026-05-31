@@ -583,7 +583,7 @@ h3 {
   --arrow-rotation: -90deg;
   --arrow-scale: 0.58;
   background:
-    conic-gradient(from -90deg, #ffbd22 0 var(--gauge-progress), #f33a3a var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
+    conic-gradient(from -90deg, var(--accent) 0 var(--gauge-progress), var(--signal) var(--gauge-progress), color-mix(in srgb, var(--line) 70%, transparent) var(--gauge-progress) 100%);
 }
 
 .deployment-gauge::before {
@@ -620,15 +620,14 @@ h3 {
   content: "";
   position: absolute;
   left: 50%;
-  top: -6px;
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 24px solid #f33a3a;
-  filter: drop-shadow(0 9px 12px rgba(243, 58, 58, 0.28));
-  transform: translateX(-50%) rotate(38deg) scale(var(--arrow-scale));
-  transform-origin: 50% 80%;
+  top: -3px;
+  width: 24px;
+  height: 22px;
+  background: linear-gradient(135deg, var(--accent), var(--signal));
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 28% 50%);
+  filter: drop-shadow(0 9px 12px color-mix(in srgb, var(--accent) 26%, transparent));
+  transform: translateX(-50%) rotate(90deg) scale(var(--arrow-scale));
+  transform-origin: 50% 50%;
 }
 
 .cost-bars {
@@ -1072,6 +1071,90 @@ h3 {
   margin: 18px 0 0;
   color: var(--muted);
   font-weight: 750;
+}
+
+.client-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: color-mix(in srgb, var(--bg) 42%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.client-popup[hidden] {
+  display: none;
+}
+
+.client-popup-card {
+  position: relative;
+  width: min(760px, 100%);
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--accent-soft) 38%, transparent)),
+    var(--surface);
+  box-shadow: 0 30px 70px rgba(7, 21, 29, 0.22);
+}
+
+.client-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.client-popup-card h3 {
+  max-width: 620px;
+  margin-bottom: 10px;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.05;
+}
+
+.client-popup-card p:not(.eyebrow) {
+  max-width: 650px;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.client-popup-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.client-popup-card li {
+  position: relative;
+  padding: 12px 12px 12px 38px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.client-popup-card li::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 17px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--signal));
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-soft) 72%, transparent);
 }
 
 .contact-section {
