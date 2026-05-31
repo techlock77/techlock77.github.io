@@ -787,7 +787,7 @@ h3 {
 
 .cost-curve {
   position: absolute;
-  inset: 10px 12px 14px;
+  inset: 0;
   z-index: 3;
   overflow: visible;
   pointer-events: none;
@@ -808,10 +808,29 @@ h3 {
 
 .cost-curve-progress {
   stroke: color-mix(in srgb, var(--signal) 86%, var(--accent));
-  stroke-dasharray: 240;
+  stroke-dasharray: var(--cost-path-length, 240);
   stroke-dashoffset: var(--cost-path-offset, 240);
   stroke-width: 5;
   opacity: var(--cost-arrow-opacity, 0);
+}
+
+.cost-drop {
+  opacity: var(--cost-arrow-opacity, 0);
+  filter: drop-shadow(0 9px 12px color-mix(in srgb, var(--accent) 34%, transparent));
+  transform-origin: center;
+  will-change: opacity;
+}
+
+.cost-drop-shape {
+  fill: color-mix(in srgb, var(--signal) 78%, var(--accent));
+  stroke: color-mix(in srgb, #ffffff 64%, transparent);
+  stroke-width: 1.5;
+}
+
+.cost-drop-highlight {
+  fill: color-mix(in srgb, #ffffff 82%, transparent);
+  animation: droplet-pulse 1800ms ease-in-out infinite;
+  transform-origin: center;
 }
 
 .cost-segment {
@@ -855,33 +874,6 @@ h3 {
   --x: 83%;
   --h: 36px;
   opacity: 0.5;
-}
-
-.cost-arrow {
-  position: absolute;
-  left: var(--cost-arrow-left, 10%);
-  top: var(--cost-arrow-top, 12%);
-  z-index: 4;
-  width: 24px;
-  height: 24px;
-  border-radius: 999px 999px 999px 4px;
-  background: radial-gradient(circle at 34% 32%, #ffffff 0 9%, transparent 10%), linear-gradient(135deg, var(--accent), var(--signal));
-  box-shadow:
-    0 0 0 7px color-mix(in srgb, var(--accent-soft) 68%, transparent),
-    0 12px 22px color-mix(in srgb, var(--accent) 30%, transparent);
-  opacity: var(--cost-arrow-opacity, 0);
-  transform: translate(-50%, -50%) rotate(calc(var(--cost-arrow-angle, 40deg) - 45deg));
-  transform-origin: center;
-  will-change: left, top, opacity, transform;
-}
-
-.cost-arrow::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1px solid color-mix(in srgb, #ffffff 72%, transparent);
-  border-radius: inherit;
-  animation: droplet-pulse 1800ms ease-in-out infinite;
 }
 
 .dashboard-chips {

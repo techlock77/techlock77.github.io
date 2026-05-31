@@ -492,7 +492,10 @@ function startDashboardAnimation(dashboard) {
   const packets = [...dashboard.querySelectorAll(".data-packet")];
   const streams = [...dashboard.querySelectorAll(".throughput-stream")];
   const motion = dashboard.querySelector(".workload-motion");
-  const costArrow = dashboard.querySelector(".cost-arrow");
+  const costCurve = dashboard.querySelector(".cost-curve-progress");
+  const costCurveGuide = dashboard.querySelector(".cost-curve-guide");
+  const costDrop = dashboard.querySelector(".cost-drop");
+  const costBars = [...dashboard.querySelectorAll(".cost-segment")];
   const phases = [0, 0.28, 0.56];
   const duration = 3200;
 
@@ -516,31 +519,70 @@ function startDashboardAnimation(dashboard) {
       stream.style.transform = `scaleX(${0.42 + pulse * 0.58})`;
     });
 
-    if (costArrow) {
+    if (costCurve && costDrop) {
       const progress = (now / 2800) % 1;
       const opacity = progress < 0.16 ? progress / 0.16 : progress > 0.84 ? (1 - progress) / 0.16 : 1;
-      const costPoints = [
-        { x: 14.5, y: 13.7 },
-        { x: 33.5, y: 39.7 },
-        { x: 52.5, y: 54.8 },
-        { x: 71.5, y: 61.6 },
-        { x: 89.5, y: 65.8 }
-      ];
-      const scaledProgress = progress * (costPoints.length - 1);
-      const pointIndex = Math.min(costPoints.length - 2, Math.floor(scaledProgress));
-      const segmentProgress = scaledProgress - pointIndex;
-      const startPoint = costPoints[pointIndex];
-      const endPoint = costPoints[pointIndex + 1];
-      const smoothProgress = segmentProgress * segmentProgress * (3 - 2 * segmentProgress);
-      const curveX = startPoint.x + (endPoint.x - startPoint.x) * smoothProgress;
-      const curveY = startPoint.y + (endPoint.y - startPoint.y) * smoothProgress;
-      const curveAngle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x) * 180 / Math.PI;
-      const costTarget = costArrow.parentElement || costArrow;
-      costTarget.style.setProperty("--cost-arrow-left", `${curveX.toFixed(1)}%`);
-      costTarget.style.setProperty("--cost-arrow-top", `${curveY.toFixed(1)}%`);
-      costTarget.style.setProperty("--cost-arrow-angle", `${Math.round(curveAngle)}deg`);
+      const costTarget = costCurve.parentElement || costCurve;
+      const svg = costCurve.ownerSVGElement;
+      const svgRect = svg.getBoundingClientRect();
+      const costSegments = costBars.map((bar) => {
+        const barRect = bar.getBoundingClientRect();
+        return {
+          x: ((barRect.left + barRect.width / 2 - svgRect.left) / svgRect.width) * 220,
+          y: ((barRect.top - svgRect.top) / svgRect.height) * 126
+        };
+      }).slice(0, 5).reduce((segments, point, index, points) => {
+        if (index === points.length - 1) {
+          return segments;
+        }
+
+        const current = point;
+        const next = points[index + 1];
+        const previous = points[index - 1] || current;
+        const following = points[index + 2] || next;
+        const controlScale = 0.24;
+        segments.push([
+          current,
+          {
+            x: current.x + (next.x - previous.x) * controlScale,
+            y: current.y + (next.y - previous.y) * controlScale
+          },
+          {
+            x: next.x - (following.x - current.x) * controlScale,
+            y: next.y - (following.y - current.y) * controlScale
+          },
+          next
+        ]);
+        return segments;
+      }, []);
+
+      if (costSegments.length) {
+        const firstPoint = costSegments[0][0];
+        const curvePath = costSegments.reduce((path, [, c1, c2, end]) => {
+          return `${path} C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} ${c2.x.toFixed(1)} ${c2.y.toFixed(1)} ${end.x.toFixed(1)} ${end.y.toFixed(1)}`;
+        }, `M ${firstPoint.x.toFixed(1)} ${firstPoint.y.toFixed(1)}`);
+        costCurve.setAttribute("d", curvePath);
+        costCurveGuide?.setAttribute("d", curvePath);
+      }
+
+      const scaledProgress = progress * costSegments.length;
+      const segmentIndex = Math.min(costSegments.length - 1, Math.floor(scaledProgress));
+      const segmentProgress = scaledProgress - segmentIndex;
+      const [p0, p1, p2, p3] = costSegments[segmentIndex];
+      const oneMinusT = 1 - segmentProgress;
+      const pathPoint = {
+        x: oneMinusT ** 3 * p0.x + 3 * oneMinusT ** 2 * segmentProgress * p1.x + 3 * oneMinusT * segmentProgress ** 2 * p2.x + segmentProgress ** 3 * p3.x,
+        y: oneMinusT ** 3 * p0.y + 3 * oneMinusT ** 2 * segmentProgress * p1.y + 3 * oneMinusT * segmentProgress ** 2 * p2.y + segmentProgress ** 3 * p3.y
+      };
+      const tangent = {
+        x: 3 * oneMinusT ** 2 * (p1.x - p0.x) + 6 * oneMinusT * segmentProgress * (p2.x - p1.x) + 3 * segmentProgress ** 2 * (p3.x - p2.x),
+        y: 3 * oneMinusT ** 2 * (p1.y - p0.y) + 6 * oneMinusT * segmentProgress * (p2.y - p1.y) + 3 * segmentProgress ** 2 * (p3.y - p2.y)
+      };
+      const curveAngle = Math.atan2(tangent.y, tangent.x) * 180 / Math.PI;
       costTarget.style.setProperty("--cost-arrow-opacity", String(Math.max(0, Math.min(1, opacity))));
+      costTarget.style.setProperty("--cost-path-length", "240");
       costTarget.style.setProperty("--cost-path-offset", String(Math.round(240 - progress * 240)));
+      costDrop.setAttribute("transform", `translate(${pathPoint.x.toFixed(2)} ${pathPoint.y.toFixed(2)}) rotate(${Math.round(curveAngle - 45)})`);
     }
 
     dashboardAnimationFrame = requestAnimationFrame(frame);
