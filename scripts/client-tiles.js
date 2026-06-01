@@ -215,22 +215,37 @@ function updateCarousel(name) {
 
   state.index = wrapCarouselIndex(state.index, total);
   const activeCard = cards[state.index];
-  const gap = Number.parseFloat(window.getComputedStyle(track).columnGap || window.getComputedStyle(track).gap || "0") || 0;
   const cardWidth = activeCard.getBoundingClientRect().width;
-  const offset = (viewport.clientWidth / 2) - (cardWidth / 2) - (state.index * (cardWidth + gap));
+  const step = Math.min(cardWidth * 0.78, Math.max(190, viewport.clientWidth * 0.34));
+  const maxHeight = Math.max(...cards.map((card) => card.scrollHeight));
 
-  track.style.transform = `translate3d(${offset}px, 0, 0)`;
+  track.style.height = `${maxHeight}px`;
 
   cards.forEach((card, index) => {
     const previousIndex = wrapCarouselIndex(state.index - 1, total);
     const nextIndex = wrapCarouselIndex(state.index + 1, total);
     const isActive = index === state.index;
     const isPreview = index === previousIndex || index === nextIndex;
+    let relativePosition = (index - state.index + total) % total;
+
+    if (relativePosition > total / 2) {
+      relativePosition -= total;
+    }
+
+    const distance = Math.abs(relativePosition);
+    const clampedPosition = Math.max(-2, Math.min(2, relativePosition));
+    const scale = isActive ? 1 : distance === 1 ? 0.94 : 0.86;
+    const opacity = isActive ? 1 : distance === 1 ? 0.68 : distance === 2 ? 0.2 : 0;
 
     card.classList.toggle("is-active", isActive);
     card.classList.toggle("is-preview", isPreview && !isActive);
+    card.classList.toggle("is-outer-preview", distance === 2);
     card.classList.toggle("active", isActive && card.classList.contains("client-tile"));
     card.setAttribute("aria-current", isActive ? "true" : "false");
+    card.setAttribute("aria-hidden", distance > 2 ? "true" : "false");
+    card.style.pointerEvents = distance <= 1 ? "auto" : "none";
+    card.style.transform = `translate3d(calc(-50% + ${clampedPosition * step}px), 0, 0) scale(${scale})`;
+    card.style.opacity = String(opacity);
   });
 
   if (progress) {

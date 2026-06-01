@@ -1237,33 +1237,41 @@ h3 {
 }
 
 .carousel-track {
-  display: flex;
-  align-items: stretch;
-  gap: clamp(14px, 2vw, 22px);
+  position: relative;
+  min-height: 280px;
   will-change: transform;
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .carousel-card {
-  flex: 0 0 clamp(280px, 46vw, 520px);
-  opacity: 0.42;
-  transform: scale(0.88);
-  transition: opacity 260ms ease, transform 260ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: clamp(280px, 46vw, 520px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, 0, 0) scale(0.82);
+  transition: opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .client-carousel .carousel-card {
-  flex-basis: clamp(250px, 38vw, 420px);
+  width: clamp(250px, 38vw, 420px);
 }
 
 .carousel-card.is-active {
   opacity: 1;
-  transform: scale(1);
+  pointer-events: auto;
   z-index: 2;
 }
 
 .carousel-card.is-preview {
   opacity: 0.68;
-  transform: scale(0.94);
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.carousel-card.is-outer-preview {
+  opacity: 0.2;
+  z-index: 0;
 }
 
 .carousel-button {
@@ -1314,8 +1322,7 @@ h3 {
 }
 
 .project-grid {
-  display: flex;
-  gap: clamp(14px, 2vw, 22px);
+  min-height: 318px;
 }
 
 .project-card {
@@ -1609,8 +1616,7 @@ h3 {
 }
 
 .client-grid {
-  display: flex;
-  gap: clamp(14px, 2vw, 22px);
+  min-height: 214px;
 }
 
 .client-tile {
@@ -1929,7 +1935,7 @@ h3 {
 
   .carousel-card,
   .client-carousel .carousel-card {
-    flex-basis: min(78vw, 360px);
+    width: min(78vw, 360px);
   }
 
   .section,
