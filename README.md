@@ -1,6 +1,6 @@
-# Nitesh C Career Portfolio
+# Nitesh M Career Portfolio
 
-This repository contains a static GitHub Pages career site for Nitesh C, focused on enterprise data engineering architecture, cloud data platforms, modernization, and analytics enablement.
+This repository contains a static GitHub Pages career site for Nitesh M, focused on enterprise data engineering, MLOps, cloud data platforms, modernization, and analytics enablement.
 
 ## Live Site
 
@@ -12,13 +12,13 @@ https://techlock77.github.io/
 
 - `index.html` - main portfolio page
 - `styles/site.css` - responsive layout, theme, and visual styling
-- `scripts/client-tiles.js` - project filtering, client highlights, theme toggle, mobile navigation, and animated metrics
+- `scripts/client-tiles.js` - project filtering, client carousel interactions, theme toggle, mobile navigation, and animated metrics
 - `images/` - client logos and supporting assets
-- `your-resume.pdf` - resume linked from the page
+- `robots.txt`, `sitemap.xml`, and `.well-known/security.txt` - public trust and discovery metadata
 
 ## Hosting
 
-This is a plain static site, so GitHub Pages can serve it directly from the `main` branch with no build step.
+This is a plain static portfolio site, so GitHub Pages can serve it directly from the `main` branch with no build step. The site does not include forms, credential collection, resume downloads, payment flows, redirects, or third-party JavaScript.
 
 ## Local Preview
 
