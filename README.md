@@ -14,7 +14,7 @@ https://techlock77.github.io/
 - `styles/site.css` - responsive layout, theme, and visual styling
 - `scripts/client-tiles.js` - project filtering, client carousel interactions, theme toggle, mobile navigation, and animated metrics
 - `images/` - client logos and supporting assets
-- `robots.txt`, `sitemap.xml`, and `.well-known/security.txt` - public trust and discovery metadata
+- `robots.txt`, `sitemap.xml`, `security.txt`, and `.well-known/security.txt` - public trust and discovery metadata
 
 ## Hosting
 

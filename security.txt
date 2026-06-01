@@ -1,0 +1,5 @@
+Contact: mailto:niteshcse77@gmail.com
+Preferred-Languages: en
+Canonical: https://techlock77.github.io/security.txt
+Policy: https://techlock77.github.io/
+Expires: 2027-06-01T00:00:00Z
